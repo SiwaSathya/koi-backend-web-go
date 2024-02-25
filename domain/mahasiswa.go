@@ -6,10 +6,9 @@ import (
 	"gorm.io/gorm"
 )
 
-type Users struct {
-	ID        uint           `gorm:"not null" json:"id"`
-	Username  *string        `gorm:"not null" json:"username"`
-	Role      string         `gorm:"not null" json:"role"`
+type Mahasiswa struct {
+	Nim       uint           `gorm:"not null" json:"nim"`
+	Username  string         `gorm:"not null" json:"username"`
 	Password  string         `gorm:"not null" json:"password"`
 	CreatedAt *time.Time     `json:"created_at"`
 	UpdatedAt *time.Time     `json:"updated_at"`
