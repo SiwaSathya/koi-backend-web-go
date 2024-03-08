@@ -7,7 +7,7 @@ import (
 )
 
 type DetailKegiatan struct {
-	ID               uint           `gorm:"not null" json:"id"`
+	ID               uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
 	IdEvent          string         `gorm:"not null" json:"id_event"`
 	IdOrmawa         string         `gorm:"not null" json:"id_ormawa"`
 	NamaKegiatan     string         `gorm:"not null" json:"nama_kegiatan"`

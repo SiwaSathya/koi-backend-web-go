@@ -7,7 +7,7 @@ import (
 )
 
 type ValidasiKegiatan struct {
-	ID          uint           `gorm:"not null" json:"id"`
+	ID          uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
 	IdMahasiswa uint           `gorm:"not null" json:"id_mhs"`
 	Status      uint           `gorm:"not null" json:"status"`
 	CreatedAt   *time.Time     `json:"created_at"`
