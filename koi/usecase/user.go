@@ -26,17 +26,11 @@ func NewLocationUseCase(usr domain.UserRepository, orm domain.OrmawaRepository, 
 }
 
 func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*domain.User, error) {
-	_, err := c.userRepository.GetUser(*req.Username)
-	if err == nil {
-		return nil, fmt.Errorf("user %s already exists", *req.Username)
-	}
-	if req.Password != req.ConfirmPassword {
-		return nil, fmt.Errorf("password is not match")
-	}
 	password, err := utils.HashPassword(req.Password)
 	if err != nil {
 		return nil, fmt.Errorf("unable to hash password: %v", err)
 	}
+
 	pay := domain.User{
 		Username: req.Username,
 		Password: password,
@@ -47,6 +41,15 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		pay.Username = req.NamaOrmawa
 	} else {
 		pay.Username = req.Username
+	}
+
+	fmt.Println(pay.Username)
+	_, err = c.userRepository.GetUser(*pay.Username)
+	if err == nil {
+		return nil, fmt.Errorf("username already exists")
+	}
+	if req.Password != req.ConfirmPassword {
+		return nil, fmt.Errorf("password is not match")
 	}
 
 	res, err := c.userRepository.CreateUser(&pay)

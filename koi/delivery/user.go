@@ -44,7 +44,7 @@ func (t *UserHandler) Register(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"data":    res,
-		"message": "Successfully calculate tax",
+		"message": "Successfully create user",
 	})
 }
 
@@ -79,6 +79,6 @@ func (t *UserHandler) Login(c *fiber.Ctx) error {
 		"success": true,
 		"data":    res,
 		"token":   token,
-		"message": "Successfully calculate tax",
+		"message": "Successfully create user",
 	})
 }
