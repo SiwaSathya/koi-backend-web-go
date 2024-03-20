@@ -17,8 +17,9 @@ func NewUserHandler(c *fiber.App, das domain.UserUseCase) {
 		UserUC: das,
 	}
 	api := c.Group("/user")
-	api.Post("/register", handler.Register)
-	api.Post("/login", handler.Login)
+	public := api.Group("/public")
+	public.Post("/register", handler.Register)
+	public.Post("/login", handler.Login)
 
 }
 

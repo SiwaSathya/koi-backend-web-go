@@ -2,8 +2,11 @@ package middleware
 
 import (
 	"fmt"
+	"koi-backend-web-go/db"
 	"koi-backend-web-go/domain"
+	"koi-backend-web-go/koi/repository"
 	"koi-backend-web-go/utils/fiberutil"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,6 +15,14 @@ import (
 )
 
 const SecretKey = "your-secret-key"
+
+func UserID(c *fiber.Ctx) int64 {
+	studentId, err := strconv.Atoi(fmt.Sprintf("%v", c.Locals("id")))
+	if err == nil {
+		return int64(studentId)
+	}
+	return -1
+}
 
 func CreateToken(fill *domain.TokenClaims) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour) // Set expiration time
@@ -44,7 +55,7 @@ func ValidateToken(c *fiber.Ctx) error {
 	}
 
 	// SecretKey adalah kunci rahasia yang sama yang digunakan untuk menandatangani token
-	secretKey := []byte("yourSecretKey")
+	secretKey := []byte(SecretKey)
 
 	// Memverifikasi token
 	resp, err := verifyToken(tokens, secretKey)
@@ -56,7 +67,7 @@ func ValidateToken(c *fiber.Ctx) error {
 			"error":   err.Error(),
 		})
 	} else {
-		c.Locals("affiliate_id", resp.ID)
+		c.Locals("id", resp.ID)
 		return c.Next()
 	}
 }
@@ -100,9 +111,21 @@ func verifyToken(tokenString string, secretKey []byte) (*domain.User, error) {
 	}
 
 	// Extract user ID from the payload
-	_, ok = claims["user_id"].(string)
+	userClaims, ok := claims["user"].(map[string]interface{})
 	if !ok {
-		return &domain.User{}, fmt.Errorf("user id not found in claims")
+		return &domain.User{}, fmt.Errorf("user claim not found or not in the correct format")
+	}
+
+	id, ok := userClaims["id"].(float64) // Mengasumsikan bahwa ID adalah tipe data float64
+	if !ok {
+		return &domain.User{}, fmt.Errorf("user id not found or not in the correct format")
+	}
+
+	usrRepo := repository.NewPostgreUser(db.GormClient.DB)
+
+	res, err := usrRepo.GetUserById(uint(id))
+	if err != nil {
+		return nil, err
 	}
 
 	// repoAf := postgresql.NewPostgreAffiliate(db.Postgres.DB)
@@ -112,5 +135,5 @@ func verifyToken(tokenString string, secretKey []byte) (*domain.User, error) {
 	// 	return &domain.User{}, fmt.Errorf("Failed to get affiliate data: %v", errs)
 	// }
 
-	return &domain.User{}, nil
+	return res, nil
 }

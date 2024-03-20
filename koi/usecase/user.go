@@ -16,7 +16,7 @@ type userUseCase struct {
 	contextTimeout      time.Duration
 }
 
-func NewLocationUseCase(usr domain.UserRepository, orm domain.OrmawaRepository, mhs domain.MahasiswaRepository, t time.Duration) domain.UserUseCase {
+func NewUserUseCase(usr domain.UserRepository, orm domain.OrmawaRepository, mhs domain.MahasiswaRepository, t time.Duration) domain.UserUseCase {
 	return &userUseCase{
 		userRepository:      usr,
 		ormawaRepository:    orm,
@@ -43,7 +43,7 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		pay.Username = req.Username
 	}
 
-	fmt.Println(pay.Username)
+	// fmt.Println(pay.Username)
 	_, err = c.userRepository.GetUser(*pay.Username)
 	if err == nil {
 		return nil, fmt.Errorf("username already exists")
@@ -67,7 +67,7 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 			payOrm.NamaOrmawa = *req.NamaOrmawa
 			payOrm.Status = *req.Status
 		} else {
-			return nil, fmt.Errorf("nama ormawa and status must be field if the role is ormawa")
+			return nil, fmt.Errorf("nama_ormawa and status must be field if the role is ormawa")
 		}
 		_, err := c.ormawaRepository.CreateOrmawa(&payOrm)
 		if err != nil {
@@ -82,7 +82,7 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		if req.Nim != nil {
 			payMhs.Nim = *req.Nim
 		} else {
-			return nil, fmt.Errorf("nim must be field if the role is mahasiswa")
+			return nil, fmt.Errorf("nim must be field in if the role is mahasiswa")
 		}
 		_, err := c.mahasiswaRepository.CreateMahasiswa(&payMhs)
 		if err != nil {

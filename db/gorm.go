@@ -45,8 +45,9 @@ func RegisterTableToMigrate(db *gorm.DB) {
 		&domain.User{},
 		&domain.Mahasiswa{},
 		&domain.Ormawa{},
-		&domain.TagsEvent{},
 		&domain.Event{},
+		&domain.MetodePembayaran{},
+		&domain.Narahubung{},
 		&domain.DetailKegiatan{},
 		&domain.ValidasiKegiatan{},
 	)

@@ -44,6 +44,7 @@ type LoginPayload struct {
 type UserRepository interface {
 	CreateUser(req *User) (*User, error)
 	GetUser(username string) (*User, error)
+	GetUserById(id uint) (*User, error)
 }
 
 type UserUseCase interface {

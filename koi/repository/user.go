@@ -50,3 +50,24 @@ func (a *posgreUserRepository) GetUser(username string) (*domain.User, error) {
 
 	return &res, nil
 }
+
+func (a *posgreUserRepository) GetUserById(id uint) (*domain.User, error) {
+	var res domain.User
+	err := a.DB.
+		Model(domain.User{}).
+		Preload("Ormawa").
+		Preload("Mahasiswa").
+		Where("id = ?", id).
+		Take(&res).Error
+	if err != nil {
+		return &domain.User{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return &domain.User{}, fmt.Errorf("record not found")
+	}
+
+	fmt.Println(res)
+
+	return &res, nil
+}
