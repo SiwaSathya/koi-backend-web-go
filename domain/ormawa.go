@@ -13,6 +13,7 @@ type Ormawa struct {
 	Password   string         `gorm:"not null" json:"password"`
 	UserID     uint           `gorm:"not null" json:"user_id"`
 	User       User           `json:"user"`
+	Event      *Event         `json:"event"`
 	CreatedAt  *time.Time     `json:"created_at"`
 	UpdatedAt  *time.Time     `json:"updated_at"`
 	DeletedAt  gorm.DeletedAt `gorm:"index" json:"deleted_at"`
@@ -20,4 +21,5 @@ type Ormawa struct {
 
 type OrmawaRepository interface {
 	CreateOrmawa(req *Ormawa) (*Ormawa, error)
+	GetOrmawaByID(id uint) (*Ormawa, error)
 }

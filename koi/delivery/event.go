@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"koi-backend-web-go/domain"
 	"koi-backend-web-go/middleware"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/pandeptwidyaop/golog"
@@ -18,10 +19,13 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 		EventUC: das,
 	}
 	api := c.Group("/event")
+
 	private := api.Group("/private")
 	private.Post("/create-event", middleware.ValidateTokenOrmawa, handler.CreateEvent)
-	_ = api.Group("/public")
 
+	public := api.Group("/public")
+	public.Get("/get-all-events", handler.GetAllEvents)
+	public.Get("/get-event-by-ormawa/:id", handler.GetAllEventsIdOrmawa)
 }
 
 func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
@@ -47,9 +51,53 @@ func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"success": true,
 		"data":    res,
 		"message": "Successfully create event",
+	})
+}
+
+func (t *EventHandler) GetAllEvents(c *fiber.Ctx) error {
+	res, er := t.EventUC.GetAllEvents(c.Context())
+	if er != nil {
+		golog.Slack.ErrorWithData("error get event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
+		"message": "Successfully get event",
+	})
+}
+
+func (t *EventHandler) GetAllEventsIdOrmawa(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":  false,
+			"message": "failed convert to int",
+			"error":   err,
+		})
+	}
+	res, er := t.EventUC.GetEventByOrmawaID(c.Context(), uint(id))
+	if er != nil {
+		golog.Slack.ErrorWithData("error get event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
+		"message": "Successfully get event",
 	})
 }

@@ -33,7 +33,8 @@ func main() {
 	timeoutContext := fiber.Config{}.ReadTimeout
 
 	userUseCase := usecase.NewUserUseCase(usrRepo, ormRepo, mhsRepo, timeoutContext)
-	eventUseCase := usecase.NewEventUseCase(detKegRepo, evntRepo, naraRepo, metKegRepo, usrRepo, timeoutContext)
+	eventUseCase := usecase.NewEventUseCase(detKegRepo, evntRepo, naraRepo, metKegRepo, usrRepo, ormRepo, timeoutContext)
+	detKegUseCase := usecase.NewDetailKegiatanUseCase(detKegRepo, timeoutContext)
 
 	app := fiber.New(fiber.Config{})
 	app.Use(logger.New(logger.Config{
@@ -51,6 +52,7 @@ func main() {
 		delivery.NewHealthCheckHandler(app)
 		delivery.NewUserHandler(app, userUseCase)
 		delivery.NewEventHandler(app, eventUseCase)
+		delivery.NewDetailKegiatanHandler(app, detKegUseCase)
 		log.Fatal(app.Listen(listenPort))
 		wg.Done()
 	}()

@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
 	"koi-backend-web-go/domain"
 
 	"gorm.io/gorm"
@@ -35,4 +37,38 @@ func (a *posgreEventRepository) CreateEvent(req *domain.Event) (*domain.Event, e
 	}
 
 	return createdEvent, nil
+}
+
+func (a *posgreEventRepository) GetAllEvents() ([]domain.Event, error) {
+	var res []domain.Event
+	err := a.DB.
+		Model(domain.Event{}).
+		Preload("DetailKegiatan").
+		Find(&res).Error
+	if err != nil {
+		return []domain.Event{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []domain.Event{}, fmt.Errorf("record not found")
+	}
+
+	return res, nil
+}
+
+func (a *posgreEventRepository) GetEventByOrmawaID(id uint) ([]domain.Event, error) {
+	var res []domain.Event
+	err := a.DB.
+		Model(domain.Event{}).
+		Where("ormawa_id = ?", id).
+		Find(&res).Error
+	if err != nil {
+		return []domain.Event{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []domain.Event{}, fmt.Errorf("record not found")
+	}
+
+	return res, nil
 }

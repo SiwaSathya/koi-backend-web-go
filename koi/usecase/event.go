@@ -15,16 +15,18 @@ type eventUseCase struct {
 	narahubungRepository      domain.NarahubungRepository
 	metodePembayranRepository domain.MetodePembayaranRepository
 	userRepository            domain.UserRepository
+	ormawaRepository          domain.OrmawaRepository
 	contextTimeout            time.Duration
 }
 
-func NewEventUseCase(dtl domain.DetailKegiatanRepository, evt domain.EventRepository, nrh domain.NarahubungRepository, mtd domain.MetodePembayaranRepository, usr domain.UserRepository, t time.Duration) domain.EventUseCase {
+func NewEventUseCase(dtl domain.DetailKegiatanRepository, evt domain.EventRepository, nrh domain.NarahubungRepository, mtd domain.MetodePembayaranRepository, usr domain.UserRepository, orm domain.OrmawaRepository, t time.Duration) domain.EventUseCase {
 	return &eventUseCase{
 		detailKegiatanRepository:  dtl,
 		eventRepository:           evt,
 		narahubungRepository:      nrh,
 		metodePembayranRepository: mtd,
 		userRepository:            usr,
+		ormawaRepository:          orm,
 		contextTimeout:            t,
 	}
 }
@@ -71,4 +73,27 @@ func (e *eventUseCase) CreateEvent(ctx context.Context, req *domain.CreateEvent)
 	}
 
 	return res, nil
+}
+
+func (e *eventUseCase) GetAllEvents(ctx context.Context) ([]domain.Event, error) {
+	return e.eventRepository.GetAllEvents()
+}
+
+func (e *eventUseCase) GetEventByOrmawaID(ctx context.Context, id uint) (*domain.ResponeListEventOrmawa, error) {
+	resOrm, err := e.ormawaRepository.GetOrmawaByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	resEvent, err := e.eventRepository.GetEventByOrmawaID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	result := domain.ResponeListEventOrmawa{
+		Ormawa: *resOrm,
+		Event:  resEvent,
+	}
+
+	return &result, nil
 }

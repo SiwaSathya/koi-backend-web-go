@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"context"
 	"time"
 
 	"gorm.io/gorm"
@@ -25,4 +26,9 @@ type DetailKegiatan struct {
 
 type DetailKegiatanRepository interface {
 	CreateDetailKegiatan(req *DetailKegiatan) (*DetailKegiatan, error)
+	GetDetailKegiatanByID(id uint) (*DetailKegiatan, error)
+}
+
+type DetailKegiatanUseCase interface {
+	GetDetailKegiatanByID(ctx context.Context, id uint) (*DetailKegiatan, error)
 }

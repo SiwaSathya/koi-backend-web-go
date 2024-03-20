@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
 	"koi-backend-web-go/domain"
 
 	"gorm.io/gorm"
@@ -26,4 +28,23 @@ func (a *posgreOrmawaRepository) CreateOrmawa(req *domain.Ormawa) (*domain.Ormaw
 	}
 
 	return req, nil
+}
+
+func (a *posgreOrmawaRepository) GetOrmawaByID(id uint) (*domain.Ormawa, error) {
+	var res domain.Ormawa
+	err := a.DB.
+		Model(domain.Ormawa{}).
+		Where("id = ?", id).
+		Take(&res).Error
+	if err != nil {
+		return &domain.Ormawa{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return &domain.Ormawa{}, fmt.Errorf("record not found")
+	}
+
+	fmt.Println(res)
+
+	return &res, nil
 }
