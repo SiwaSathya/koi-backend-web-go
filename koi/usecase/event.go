@@ -34,6 +34,10 @@ func (e *eventUseCase) CreateEvent(ctx context.Context, req *domain.CreateEvent)
 	if err != nil {
 		return nil, err
 	}
+
+	if id.Role != "ormawa" {
+		return nil, fmt.Errorf("you must login with ormawa account")
+	}
 	payEvent := domain.Event{
 		OrmawaID:        id.Ormawa.ID,
 		NamaKegiatan:    req.NamaKegiatan,
