@@ -19,7 +19,7 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 	}
 	api := c.Group("/event")
 	private := api.Group("/private")
-	private.Post("/create-event", middleware.ValidateToken, handler.CreateEvent)
+	private.Post("/create-event", middleware.ValidateTokenOrmawa, handler.CreateEvent)
 	_ = api.Group("/public")
 
 }
@@ -39,13 +39,6 @@ func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
 	fmt.Println("ini id ormawa: ", req)
 	res, er := t.EventUC.CreateEvent(c.Context(), req)
 	if er != nil {
-		if er.Error() == "you must login with ormawa account" {
-			return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
-				"status":  false,
-				"message": er,
-				"error":   er.Error(),
-			})
-		}
 		golog.Slack.ErrorWithData("error create event", c.Body(), er)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"status":  false,

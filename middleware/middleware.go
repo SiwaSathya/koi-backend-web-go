@@ -43,7 +43,7 @@ func CreateToken(fill *domain.TokenClaims) (string, error) {
 	return signedToken, nil
 }
 
-func ValidateToken(c *fiber.Ctx) error {
+func ValidateTokenOrmawa(c *fiber.Ctx) error {
 	authHeaders := c.Get("Authorization")
 	if !strings.Contains(authHeaders, "Bearer") {
 		return fiberutil.ReturnStatusUnauthorized(c)
@@ -59,12 +59,51 @@ func ValidateToken(c *fiber.Ctx) error {
 
 	// Memverifikasi token
 	resp, err := verifyToken(tokens, secretKey)
-	fmt.Println(resp)
 	if err != nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "Error",
-			"message": "Token tidak valid",
+			"message": "token is not valid",
 			"error":   err.Error(),
+		})
+	} else if resp.Role != "ormawa" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  "Error",
+			"message": fmt.Sprintf("your role is %s, login as a ormawa", resp.Role),
+			"error":   "cannot access this api",
+		})
+	} else {
+		c.Locals("id", resp.ID)
+		return c.Next()
+	}
+}
+
+func ValidateTokenMahasiswa(c *fiber.Ctx) error {
+	authHeaders := c.Get("Authorization")
+	if !strings.Contains(authHeaders, "Bearer") {
+		return fiberutil.ReturnStatusUnauthorized(c)
+	}
+
+	tokens := strings.Replace(authHeaders, "Bearer ", "", -1)
+	if tokens == "Bearer" {
+		return fiberutil.ReturnStatusUnauthorized(c)
+	}
+
+	// SecretKey adalah kunci rahasia yang sama yang digunakan untuk menandatangani token
+	secretKey := []byte(SecretKey)
+
+	// Memverifikasi token
+	resp, err := verifyToken(tokens, secretKey)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  "Error",
+			"message": "token is not valid",
+			"error":   err.Error(),
+		})
+	} else if resp.Role != "mahasiswa" {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  "Error",
+			"message": fmt.Sprintf("your role is %s, login as a ormawa", resp.Role),
+			"error":   "cannot access this api",
 		})
 	} else {
 		c.Locals("id", resp.ID)
