@@ -61,6 +61,7 @@ func (a *posgreEventRepository) GetEventByOrmawaID(id uint) ([]domain.Event, err
 	err := a.DB.
 		Model(domain.Event{}).
 		Where("ormawa_id = ?", id).
+		Preload("DetailKegiatan").
 		Find(&res).Error
 	if err != nil {
 		return []domain.Event{}, err
