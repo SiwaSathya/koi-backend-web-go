@@ -15,8 +15,8 @@ type Event struct {
 	ItsOpen         uint            `gorm:"default:0" json:"its_open"`
 	TanggalKegiatan string          `gorm:"not null" json:"tanggal_kegiatan"`
 	TingkatKegiatan string          `gorm:"not null" json:"tingkat_kegiatan"`
-	Ormawa          *Ormawa         `gorm:"not null" json:"ormawa"`
-	DetailKegiatan  *DetailKegiatan `gorm:"not null" json:"detail_kegiatan"`
+	Ormawa          *Ormawa         `json:"ormawa"`
+	DetailKegiatan  *DetailKegiatan `json:"detail_kegiatan"`
 	CreatedAt       *time.Time      `json:"created_at"`
 	UpdatedAt       *time.Time      `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt  `gorm:"index" json:"deleted_at"`

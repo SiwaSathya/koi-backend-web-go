@@ -102,7 +102,7 @@ func ValidateTokenMahasiswa(c *fiber.Ctx) error {
 	} else if resp.Role != "mahasiswa" {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"status":  "Error",
-			"message": fmt.Sprintf("your role is %s, login as a ormawa", resp.Role),
+			"message": fmt.Sprintf("your role is %s, login as a mahasiswa", resp.Role),
 			"error":   "cannot access this api",
 		})
 	} else {

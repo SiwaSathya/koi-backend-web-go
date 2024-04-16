@@ -11,7 +11,7 @@ type Mahasiswa struct {
 	Username  string         `gorm:"not null" json:"username"`
 	Password  string         `gorm:"not null" json:"password"`
 	UserID    uint           `gorm:"not null" json:"user_id"`
-	User      User           `json:"user"`
+	User      *User          `json:"user"`
 	CreatedAt *time.Time     `json:"created_at"`
 	UpdatedAt *time.Time     `json:"updated_at"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"deleted_at"`
@@ -19,4 +19,5 @@ type Mahasiswa struct {
 
 type MahasiswaRepository interface {
 	CreateMahasiswa(req *Mahasiswa) (*Mahasiswa, error)
+	GetMahasiswaByUserID(userID uint) (*Mahasiswa, error)
 }

@@ -29,12 +29,14 @@ func main() {
 	evntRepo := repository.NewPostgreEvent(db.GormClient.DB)
 	metKegRepo := repository.NewPostgreMetodePembayaran(db.GormClient.DB)
 	naraRepo := repository.NewPostgreNarahubung(db.GormClient.DB)
+	pmbyrnRepo := repository.NewPostgrePembayaran(db.GormClient.DB)
 
 	timeoutContext := fiber.Config{}.ReadTimeout
 
 	userUseCase := usecase.NewUserUseCase(usrRepo, ormRepo, mhsRepo, timeoutContext)
 	eventUseCase := usecase.NewEventUseCase(detKegRepo, evntRepo, naraRepo, metKegRepo, usrRepo, ormRepo, timeoutContext)
 	detKegUseCase := usecase.NewDetailKegiatanUseCase(detKegRepo, timeoutContext)
+	pmbyrnUseCase := usecase.NewPembayaranUseCase(pmbyrnRepo, mhsRepo, timeoutContext)
 
 	app := fiber.New(fiber.Config{})
 	app.Use(logger.New(logger.Config{
@@ -53,6 +55,7 @@ func main() {
 		delivery.NewUserHandler(app, userUseCase)
 		delivery.NewEventHandler(app, eventUseCase)
 		delivery.NewDetailKegiatanHandler(app, detKegUseCase)
+		delivery.NewPembayaranHandler(app, pmbyrnUseCase)
 		log.Fatal(app.Listen(listenPort))
 		wg.Done()
 	}()

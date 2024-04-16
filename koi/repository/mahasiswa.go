@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
 	"koi-backend-web-go/domain"
 
 	"gorm.io/gorm"
@@ -35,4 +37,22 @@ func (a *posgreMahasiswaRepository) CreateMahasiswa(req *domain.Mahasiswa) (*dom
 	}
 
 	return createdMahasiswa, nil
+}
+
+func (a *posgreMahasiswaRepository) GetMahasiswaByUserID(userID uint) (*domain.Mahasiswa, error) {
+	var res domain.Mahasiswa
+	err := a.DB.
+		Model(domain.Mahasiswa{}).
+		Where("user_id = ?", userID).
+		Find(&res).Error
+	if err != nil {
+		return &domain.Mahasiswa{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return &domain.Mahasiswa{}, fmt.Errorf("record not found")
+	}
+
+	return &res, nil
+
 }

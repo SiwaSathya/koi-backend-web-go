@@ -50,6 +50,7 @@ func RegisterTableToMigrate(db *gorm.DB) {
 		&domain.Narahubung{},
 		&domain.DetailKegiatan{},
 		&domain.ValidasiKegiatan{},
+		&domain.Pembayaran{},
 	)
 	if e != nil {
 		golog.Slack.Error("Failed to run migration", e)
