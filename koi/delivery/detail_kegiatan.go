@@ -33,6 +33,7 @@ func (t *DetailKegiatanHandler) GetDetailKegiatanByID(c *fiber.Ctx) error {
 			"error":   err,
 		})
 	}
+
 	res, er := t.DetailKegiatanUC.GetDetailKegiatanByID(c.Context(), uint(id))
 	if er != nil {
 		golog.Slack.ErrorWithData("error get detail kegiatan", c.Body(), er)

@@ -41,6 +41,8 @@ func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
 	id := middleware.UserID(c)
 	req.OrmawaID = uint(id)
 	fmt.Println("ini id ormawa: ", req)
+	local := c.Locals("role")
+	fmt.Println("ini local brok: ", local)
 	res, er := t.EventUC.CreateEvent(c.Context(), req)
 	if er != nil {
 		golog.Slack.ErrorWithData("error create event", c.Body(), er)
@@ -54,6 +56,7 @@ func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"success": true,
 		"data":    res,
+		"local":   local,
 		"message": "Successfully create event",
 	})
 }

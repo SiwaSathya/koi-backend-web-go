@@ -45,21 +45,7 @@ func main() {
 		TimeFormat: "02 January 2006 15:04:05",
 		TimeZone:   "Asia/Jakarta",
 	}))
-	app.Use(
-
-		func(c *fiber.Ctx) error {
-			return c.Next()
-		},
-
-		cors.New(cors.Config{
-			AllowCredentials: true,
-			AllowOrigins:     "http://localhost:4000",
-			AllowHeaders:     "Accept, Authorization, Content-Type, Origin, Referer, User-Agent, X-Requested-With, Accept-Encoding, Accept-Language",
-			AllowMethods:     "*",
-			MaxAge:           0,
-			ExposeHeaders:    "Content-Disposition",
-		}),
-	)
+	app.Use(cors.New())
 
 	wg := new(sync.WaitGroup)
 	wg.Add(2)
