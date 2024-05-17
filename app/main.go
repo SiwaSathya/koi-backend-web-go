@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	"github.com/pandeptwidyaop/golog"
@@ -44,6 +45,21 @@ func main() {
 		TimeFormat: "02 January 2006 15:04:05",
 		TimeZone:   "Asia/Jakarta",
 	}))
+	app.Use(
+
+		func(c *fiber.Ctx) error {
+			return c.Next()
+		},
+
+		cors.New(cors.Config{
+			AllowCredentials: true,
+			AllowOrigins:     "http://localhost:*.*",
+			AllowHeaders:     "Accept, Authorization, Content-Type, Origin, Referer, User-Agent, X-Requested-With, Accept-Encoding, Accept-Language",
+			AllowMethods:     "*",
+			MaxAge:           0,
+			ExposeHeaders:    "Content-Disposition",
+		}),
+	)
 
 	wg := new(sync.WaitGroup)
 	wg.Add(2)
@@ -61,6 +77,7 @@ func main() {
 	}()
 	golog.Slack.Info(fmt.Sprintf("%s: App Start & Running", appName))
 	wg.Wait()
+
 }
 
 func Init() {
