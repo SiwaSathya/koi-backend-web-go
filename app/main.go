@@ -53,7 +53,7 @@ func main() {
 
 		cors.New(cors.Config{
 			AllowCredentials: true,
-			AllowOrigins:     "http://localhost:*.*",
+			AllowOrigins:     "http://localhost:4000",
 			AllowHeaders:     "Accept, Authorization, Content-Type, Origin, Referer, User-Agent, X-Requested-With, Accept-Encoding, Accept-Language",
 			AllowMethods:     "*",
 			MaxAge:           0,
