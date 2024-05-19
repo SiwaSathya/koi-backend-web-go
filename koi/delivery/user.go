@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"koi-backend-web-go/domain"
+	"koi-backend-web-go/middleware"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gofiber/fiber/v2"
@@ -17,6 +18,8 @@ func NewUserHandler(c *fiber.App, das domain.UserUseCase) {
 		UserUC: das,
 	}
 	api := c.Group("/user")
+	private := api.Group("/private")
+	private.Get("/profile", handler.GetProfie)
 	public := api.Group("/public")
 	public.Post("/register", handler.Register)
 	public.Post("/login", handler.Login)
@@ -80,6 +83,25 @@ func (t *UserHandler) Login(c *fiber.Ctx) error {
 		"success": true,
 		"data":    res,
 		"token":   token,
+		"message": "Successfully create user",
+	})
+}
+
+func (t *UserHandler) GetProfie(c *fiber.Ctx) error {
+	id := middleware.UserID(c)
+	res, er := t.UserUC.GetUserById(c.Context(), uint(id))
+	if er != nil {
+		golog.Slack.ErrorWithData("error create user", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
 		"message": "Successfully create user",
 	})
 }

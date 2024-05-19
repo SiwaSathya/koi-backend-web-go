@@ -111,3 +111,7 @@ func (c *userUseCase) LoginUser(ctx context.Context, req *domain.LoginPayload) (
 	}
 	return res, token, nil
 }
+
+func (c *userUseCase) GetUserById(ctx context.Context, id uint) (*domain.User, error) {
+	return c.userRepository.GetUserById(id)
+}
