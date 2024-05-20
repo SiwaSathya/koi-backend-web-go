@@ -19,7 +19,7 @@ func NewUserHandler(c *fiber.App, das domain.UserUseCase) {
 	}
 	api := c.Group("/user")
 	private := api.Group("/private")
-	private.Get("/profile", handler.GetProfie)
+	private.Get("/profile", middleware.Validate, handler.GetProfie)
 	public := api.Group("/public")
 	public.Post("/register", handler.Register)
 	public.Post("/login", handler.Login)

@@ -77,6 +77,34 @@ func ValidateTokenOrmawa(c *fiber.Ctx) error {
 	}
 }
 
+func Validate(c *fiber.Ctx) error {
+	authHeaders := c.Get("Authorization")
+	if !strings.Contains(authHeaders, "Bearer") {
+		return fiberutil.ReturnStatusUnauthorized(c)
+	}
+
+	tokens := strings.Replace(authHeaders, "Bearer ", "", -1)
+	if tokens == "Bearer" {
+		return fiberutil.ReturnStatusUnauthorized(c)
+	}
+
+	// SecretKey adalah kunci rahasia yang sama yang digunakan untuk menandatangani token
+	secretKey := []byte(SecretKey)
+
+	// Memverifikasi token
+	resp, err := verifyToken(tokens, secretKey)
+	if err != nil {
+		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
+			"status":  "Error",
+			"message": "token is not valid",
+			"error":   err.Error(),
+		})
+	} else {
+		c.Locals("id", resp.ID)
+		return c.Next()
+	}
+}
+
 func ValidateTokenMahasiswa(c *fiber.Ctx) error {
 	authHeaders := c.Get("Authorization")
 	if !strings.Contains(authHeaders, "Bearer") {
