@@ -34,7 +34,7 @@ func main() {
 
 	timeoutContext := fiber.Config{}.ReadTimeout
 
-	userUseCase := usecase.NewUserUseCase(usrRepo, ormRepo, mhsRepo, timeoutContext)
+	userUseCase := usecase.NewUserUseCase(usrRepo, ormRepo, mhsRepo, evntRepo, timeoutContext)
 	eventUseCase := usecase.NewEventUseCase(detKegRepo, evntRepo, naraRepo, metKegRepo, usrRepo, ormRepo, timeoutContext)
 	detKegUseCase := usecase.NewDetailKegiatanUseCase(detKegRepo, timeoutContext)
 	pmbyrnUseCase := usecase.NewPembayaranUseCase(pmbyrnRepo, mhsRepo, timeoutContext)

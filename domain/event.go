@@ -13,6 +13,7 @@ type Event struct {
 	NamaKegiatan    string          `gorm:"not null" json:"nama_kegiatan"`
 	HargaTiket      uint            `gorm:"not null" json:"harga_tiket"`
 	ItsOpen         uint            `gorm:"default:0" json:"its_open"`
+	Category        string          `gorm:"not null" json:"category"`
 	TanggalKegiatan string          `gorm:"not null" json:"tanggal_kegiatan"`
 	TingkatKegiatan string          `gorm:"not null" json:"tingkat_kegiatan"`
 	Ormawa          *Ormawa         `json:"ormawa"`

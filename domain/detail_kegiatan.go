@@ -27,8 +27,10 @@ type DetailKegiatan struct {
 type DetailKegiatanRepository interface {
 	CreateDetailKegiatan(req *DetailKegiatan) (*DetailKegiatan, error)
 	GetDetailKegiatanByID(id uint) (*DetailKegiatan, error)
+	UpdateStatus(eventID uint, status string) error
 }
 
 type DetailKegiatanUseCase interface {
 	GetDetailKegiatanByID(ctx context.Context, id uint) (*DetailKegiatan, error)
+	UpdateStatus(ctx context.Context, eventID uint, status string) error
 }

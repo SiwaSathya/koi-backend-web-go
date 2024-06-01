@@ -20,6 +20,7 @@ func NewUserHandler(c *fiber.App, das domain.UserUseCase) {
 	api := c.Group("/user")
 	private := api.Group("/private")
 	private.Get("/profile", middleware.Validate, handler.GetProfie)
+	private.Get("/dashboard-kemahasiswaan", middleware.ValidateTokenKemahasiswaan, handler.GetDashboardKemahasiswaan)
 	public := api.Group("/public")
 	public.Post("/register", handler.Register)
 	public.Post("/login", handler.Login)
@@ -90,6 +91,24 @@ func (t *UserHandler) Login(c *fiber.Ctx) error {
 func (t *UserHandler) GetProfie(c *fiber.Ctx) error {
 	id := middleware.UserID(c)
 	res, er := t.UserUC.GetUserById(c.Context(), uint(id))
+	if er != nil {
+		golog.Slack.ErrorWithData("error create user", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
+		"message": "Successfully create user",
+	})
+}
+
+func (t *UserHandler) GetDashboardKemahasiswaan(c *fiber.Ctx) error {
+	res, er := t.UserUC.PengajuanEventOrmawa(c.Context())
 	if er != nil {
 		golog.Slack.ErrorWithData("error create user", c.Body(), er)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

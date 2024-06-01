@@ -13,14 +13,16 @@ type userUseCase struct {
 	userRepository      domain.UserRepository
 	ormawaRepository    domain.OrmawaRepository
 	mahasiswaRepository domain.MahasiswaRepository
+	eventRepository     domain.EventRepository
 	contextTimeout      time.Duration
 }
 
-func NewUserUseCase(usr domain.UserRepository, orm domain.OrmawaRepository, mhs domain.MahasiswaRepository, t time.Duration) domain.UserUseCase {
+func NewUserUseCase(usr domain.UserRepository, orm domain.OrmawaRepository, mhs domain.MahasiswaRepository, er domain.EventRepository, t time.Duration) domain.UserUseCase {
 	return &userUseCase{
 		userRepository:      usr,
 		ormawaRepository:    orm,
 		mahasiswaRepository: mhs,
+		eventRepository:     er,
 		contextTimeout:      t,
 	}
 }
@@ -114,4 +116,51 @@ func (c *userUseCase) LoginUser(ctx context.Context, req *domain.LoginPayload) (
 
 func (c *userUseCase) GetUserById(ctx context.Context, id uint) (*domain.User, error) {
 	return c.userRepository.GetUserById(id)
+}
+
+func (c *userUseCase) PengajuanEventOrmawa(ctx context.Context) (map[string]any, error) {
+	res, err := c.eventRepository.GetAllEvents()
+	if err != nil {
+		return nil, err
+	}
+	var (
+		waitingValidation int
+		eventAccepted     int
+		seminar           int
+		race              int
+		entertainment     int
+		workshop          int
+		socialActivities  int
+	)
+	for _, val := range res {
+		if val.Category == "seminar" {
+			seminar += 1
+		} else if val.Category == "race" {
+			race += 1
+		} else if val.Category == "entertainment" {
+			entertainment += 1
+		} else if val.Category == "workshop" {
+			workshop += 1
+		} else if val.Category == "social_activies" {
+			socialActivities += 1
+		}
+
+		if val.DetailKegiatan.Status == "pending" {
+			waitingValidation += 1
+		} else if val.DetailKegiatan.Status == "accepted" {
+			eventAccepted += 1
+		}
+
+	}
+	response := map[string]any{
+		"event":              len(res),
+		"waiting_validation": waitingValidation,
+		"event_accepted":     eventAccepted,
+		"seminar":            seminar,
+		"race":               race,
+		"entertainment":      entertainment,
+		"workshop":           workshop,
+		"social_activities":  socialActivities,
+	}
+	return response, nil
 }

@@ -21,3 +21,7 @@ func NewDetailKegiatanUseCase(dtl domain.DetailKegiatanRepository, t time.Durati
 func (k *detailKegiatanUseCase) GetDetailKegiatanByID(ctx context.Context, id uint) (*domain.DetailKegiatan, error) {
 	return k.detailKegiatanRepository.GetDetailKegiatanByID(id)
 }
+
+func (k *detailKegiatanUseCase) UpdateStatus(ctx context.Context, eventID uint, status string) error {
+	return k.detailKegiatanRepository.UpdateStatus(eventID, status)
+}

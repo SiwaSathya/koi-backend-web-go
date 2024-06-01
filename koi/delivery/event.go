@@ -22,6 +22,7 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 
 	private := api.Group("/private")
 	private.Post("/create-event", middleware.ValidateTokenOrmawa, handler.CreateEvent)
+	private.Get("/get-event-ormawa", middleware.ValidateTokenOrmawa, handler.GetAllEventsIdOrmawaSide)
 
 	public := api.Group("/public")
 	public.Get("/get-all-events", handler.GetAllEvents)
@@ -63,6 +64,25 @@ func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
 
 func (t *EventHandler) GetAllEvents(c *fiber.Ctx) error {
 	res, er := t.EventUC.GetAllEvents(c.Context())
+	if er != nil {
+		golog.Slack.ErrorWithData("error get event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
+		"message": "Successfully get event",
+	})
+}
+
+func (t *EventHandler) GetAllEventsIdOrmawaSide(c *fiber.Ctx) error {
+	id := middleware.UserID(c)
+	res, er := t.EventUC.GetEventByOrmawaID(c.Context(), uint(id))
 	if er != nil {
 		golog.Slack.ErrorWithData("error get event", c.Body(), er)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

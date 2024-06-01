@@ -51,4 +51,5 @@ type UserUseCase interface {
 	CreateUser(ctx context.Context, req *CreateUser) (*User, error)
 	LoginUser(ctx context.Context, req *LoginPayload) (*User, string, error)
 	GetUserById(ctx context.Context, id uint) (*User, error)
+	PengajuanEventOrmawa(ctx context.Context) (map[string]any, error)
 }
