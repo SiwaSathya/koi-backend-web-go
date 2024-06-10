@@ -52,6 +52,7 @@ type UserRepository interface {
 	GetUser(username string) (*User, error)
 	GetUserById(id uint) (*User, error)
 	UpdatePassword(req *ResetPassword) error
+	// UpdateProfile()
 }
 
 type UserUseCase interface {

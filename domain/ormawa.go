@@ -7,17 +7,18 @@ import (
 )
 
 type Ormawa struct {
-	ID         uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
-	NamaOrmawa string         `gorm:"not null" json:"nama_ormawa"`
-	Status     int            `gorm:"not null" json:"status"`
-	Password   string         `gorm:"not null" json:"password"`
-	UserID     uint           `gorm:"not null" json:"user_id"`
-	Deskripsi  string         `gorm:"not null" json:"deskripsi"`
-	User       *User          `json:"user"`
-	Event      *Event         `json:"event"`
-	CreatedAt  *time.Time     `json:"created_at"`
-	UpdatedAt  *time.Time     `json:"updated_at"`
-	DeletedAt  gorm.DeletedAt `gorm:"index" json:"deleted_at"`
+	ID          uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
+	NamaOrmawa  string         `gorm:"not null" json:"nama_ormawa"`
+	Status      int            `gorm:"not null" json:"status"`
+	Password    string         `gorm:"not null" json:"password"`
+	UserID      uint           `gorm:"not null" json:"user_id"`
+	Deskripsi   string         `gorm:"not null" json:"deskripsi"`
+	JenisOrmawa string         `gorm:"not null" json:"jenis_ormawa"`
+	User        *User          `json:"user"`
+	Event       *Event         `json:"event"`
+	CreatedAt   *time.Time     `json:"created_at"`
+	UpdatedAt   *time.Time     `json:"updated_at"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }
 
 type OrmawaRepository interface {
