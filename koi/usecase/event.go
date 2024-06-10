@@ -97,3 +97,47 @@ func (e *eventUseCase) GetEventByOrmawaID(ctx context.Context, id uint) (*domain
 
 	return &result, nil
 }
+
+func (e *eventUseCase) UpdateEvent(ctx context.Context, req *domain.CreateEvent) error {
+	payEvent := domain.Event{
+		ID:              req.ID,
+		NamaKegiatan:    req.NamaKegiatan,
+		TanggalKegiatan: req.TanggalKegiatan,
+		TingkatKegiatan: req.TingkatKegiatan,
+		HargaTiket:      req.HargaTiket,
+	}
+	err := e.eventRepository.UpdateEvent(&payEvent)
+	if err != nil {
+		return err
+	}
+
+	// req.DetailKegiatan.EventID = res.ID
+	err = e.detailKegiatanRepository.UpdateDetailKegiatan(&req.DetailKegiatan)
+	if err != nil {
+		return err
+	}
+
+	for _, valMet := range req.MetodePembayaran {
+		// valMet.DetailKegiatanID = resDet.ID
+		err = e.metodePembayranRepository.UpdateMetodePembayaran(&valMet)
+		if err != nil {
+			golog.Slack.Error(fmt.Sprintf("cannot store the metode pembayaran %v", valMet), err)
+			continue
+		}
+	}
+
+	for _, valNar := range req.Narahubung {
+		// valNar.DetailKegiatanID = resDet.ID
+		err = e.narahubungRepository.UpdateNarahubung(&valNar)
+		if err != nil {
+			golog.Slack.Error(fmt.Sprintf("cannot store the narahubung %v", valNar), err)
+			continue
+		}
+	}
+
+	return nil
+}
+
+func (e *eventUseCase) GetEventByID(ctx context.Context, id uint) (*domain.Event, error) {
+	return e.eventRepository.GetEventByID(id)
+}

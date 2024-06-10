@@ -41,10 +41,17 @@ type LoginPayload struct {
 	Password string  `json:"password"`
 }
 
+type ResetPassword struct {
+	UserID               string `json:"user_id"`
+	Password             string `json:"password"`
+	PasswordConfirmation string `json:"password_confirmation"`
+}
+
 type UserRepository interface {
 	CreateUser(req *User) (*User, error)
 	GetUser(username string) (*User, error)
 	GetUserById(id uint) (*User, error)
+	UpdatePassword(req *ResetPassword) error
 }
 
 type UserUseCase interface {
@@ -52,4 +59,5 @@ type UserUseCase interface {
 	LoginUser(ctx context.Context, req *LoginPayload) (*User, string, error)
 	GetUserById(ctx context.Context, id uint) (*User, error)
 	PengajuanEventOrmawa(ctx context.Context) (map[string]any, error)
+	ResetPassword(ctx context.Context, req *ResetPassword) error
 }

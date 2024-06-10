@@ -55,6 +55,25 @@ func (a *posgreEventRepository) GetAllEvents() ([]domain.Event, error) {
 
 	return res, nil
 }
+func (a *posgreEventRepository) GetEventByID(id uint) (*domain.Event, error) {
+	var res domain.Event
+	err := a.DB.
+		Model(domain.Event{}).
+		Where("id = ?", id).
+		Preload("DetailKegiatan").
+		Preload("Narahubung").
+		Preload("MetodePembayaran").
+		Find(&res).Error
+	if err != nil {
+		return &domain.Event{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return &domain.Event{}, fmt.Errorf("record not found")
+	}
+
+	return &res, nil
+}
 
 func (a *posgreEventRepository) GetEventByOrmawaID(id uint) ([]domain.Event, error) {
 	var res []domain.Event
@@ -72,4 +91,30 @@ func (a *posgreEventRepository) GetEventByOrmawaID(id uint) ([]domain.Event, err
 	}
 
 	return res, nil
+}
+
+func (a *posgreEventRepository) UpdateEvent(req *domain.Event) error {
+	err := a.DB.
+		Model(domain.Event{}).
+		Where("id = ?", req.ID).
+		Select("nama_kegiatan", "harga_tiket", "its_open", "categry", "tanggal_kegiatan", "tingkat_kegiatan").
+		Updates(map[string]interface{}{
+			"nama_kegiatan":    req.NamaKegiatan,
+			"harga_tiket":      req.HargaTiket,
+			"its_open":         req.ItsOpen,
+			"category":         req.Category,
+			"tanggal_kegiatan": req.TanggalKegiatan,
+			"tingkat_kegiatan": req.TanggalKegiatan,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
 }

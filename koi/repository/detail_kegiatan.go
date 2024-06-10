@@ -82,3 +82,29 @@ func (a *posgreDetailKegiatanRepository) UpdateStatus(eventID uint, status strin
 
 	return nil
 }
+
+func (a *posgreDetailKegiatanRepository) UpdateDetailKegiatan(req *domain.DetailKegiatan) error {
+	err := a.DB.
+		Model(domain.DetailKegiatan{}).
+		Where("id = ?", req.ID).
+		Select("waktu_pelaksanaan", "lokasi", "status", "deskripsi", "gambar_kegiatan", "file_pengajuan").
+		Updates(map[string]interface{}{
+			"waktu_pelaksanaan": req.WaktuPelaksanaan,
+			"lokasi":            req.Lokasi,
+			"status":            req.Status,
+			"deskripsi":         req.Deskripsi,
+			"gambar_kegiatan":   req.GambarKegiatan,
+			"file_pengajuan":    req.FilePengajuan,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}

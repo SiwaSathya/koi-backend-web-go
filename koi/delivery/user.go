@@ -21,6 +21,7 @@ func NewUserHandler(c *fiber.App, das domain.UserUseCase) {
 	private := api.Group("/private")
 	private.Get("/profile", middleware.Validate, handler.GetProfie)
 	private.Get("/dashboard-kemahasiswaan", middleware.ValidateTokenKemahasiswaan, handler.GetDashboardKemahasiswaan)
+	private.Post("/reset-password", middleware.Validate, handler.ResetPassword)
 	public := api.Group("/public")
 	public.Post("/register", handler.Register)
 	public.Post("/login", handler.Login)
@@ -50,6 +51,31 @@ func (t *UserHandler) Register(c *fiber.Ctx) error {
 		"success": true,
 		"data":    res,
 		"message": "Successfully create user",
+	})
+}
+
+func (t *UserHandler) ResetPassword(c *fiber.Ctx) error {
+	req := new(domain.ResetPassword)
+	if err := c.BodyParser(req); err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to parse body",
+			"error":   err,
+		})
+	}
+	er := t.UserUC.ResetPassword(c.Context(), req)
+	if er != nil {
+		golog.Slack.ErrorWithData("error create user", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "Successfully reset password user",
 	})
 }
 

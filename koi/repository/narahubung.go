@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"koi-backend-web-go/domain"
 
@@ -37,4 +38,27 @@ func (a *posgreNarahubungRepository) CreateNarahubung(req *domain.Narahubung) (*
 	}
 
 	return createdNarahubung, nil
+}
+
+func (a *posgreNarahubungRepository) UpdateNarahubung(req *domain.Narahubung) error {
+	err := a.DB.
+		Model(domain.DetailKegiatan{}).
+		Where("id = ?", req.ID).
+		Select("judul", "nama_narahubung", "no_telepon").
+		Updates(map[string]interface{}{
+			"judul":      req.Judul,
+			"nama_bank":  req.NamaNarahubung,
+			"no_telepon": req.NoTelepon,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
 }

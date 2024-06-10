@@ -164,3 +164,20 @@ func (c *userUseCase) PengajuanEventOrmawa(ctx context.Context) (map[string]any,
 	}
 	return response, nil
 }
+
+func (c *userUseCase) ResetPassword(ctx context.Context, req *domain.ResetPassword) error {
+	if req.Password != req.PasswordConfirmation {
+		return fmt.Errorf("passwords does not match")
+	}
+	password, err := utils.HashPassword(req.Password)
+	if err != nil {
+		return fmt.Errorf("unable to hash password: %v", err)
+	}
+	req.Password = password
+	err = c.userRepository.UpdatePassword(req)
+	if err != nil {
+		return err
+	}
+	return nil
+
+}

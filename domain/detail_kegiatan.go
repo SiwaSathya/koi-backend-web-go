@@ -28,6 +28,7 @@ type DetailKegiatanRepository interface {
 	CreateDetailKegiatan(req *DetailKegiatan) (*DetailKegiatan, error)
 	GetDetailKegiatanByID(id uint) (*DetailKegiatan, error)
 	UpdateStatus(eventID uint, status string) error
+	UpdateDetailKegiatan(req *DetailKegiatan) error
 }
 
 type DetailKegiatanUseCase interface {

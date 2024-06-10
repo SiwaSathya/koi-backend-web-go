@@ -12,6 +12,7 @@ type Ormawa struct {
 	Status     int            `gorm:"not null" json:"status"`
 	Password   string         `gorm:"not null" json:"password"`
 	UserID     uint           `gorm:"not null" json:"user_id"`
+	Deskripsi  string         `gorm:"not null" json:"deskripsi"`
 	User       *User          `json:"user"`
 	Event      *Event         `json:"event"`
 	CreatedAt  *time.Time     `json:"created_at"`

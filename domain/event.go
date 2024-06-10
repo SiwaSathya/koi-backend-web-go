@@ -24,6 +24,7 @@ type Event struct {
 }
 
 type CreateEvent struct {
+	ID               uint               `json:"id"`
 	OrmawaID         uint               `json:"ormawa_id"`
 	NamaKegiatan     string             `json:"nama_kegiatan"`
 	TanggalKegiatan  string             `json:"tanggal_kegiatan"`
@@ -43,10 +44,14 @@ type EventRepository interface {
 	CreateEvent(req *Event) (*Event, error)
 	GetAllEvents() ([]Event, error)
 	GetEventByOrmawaID(id uint) ([]Event, error)
+	UpdateEvent(req *Event) error
+	GetEventByID(id uint) (*Event, error)
 }
 
 type EventUseCase interface {
 	CreateEvent(ctx context.Context, req *CreateEvent) (*Event, error)
 	GetAllEvents(ctx context.Context) ([]Event, error)
 	GetEventByOrmawaID(ctx context.Context, id uint) (*ResponeListEventOrmawa, error)
+	UpdateEvent(ctx context.Context, req *CreateEvent) error
+	GetEventByID(ctx context.Context, id uint) (*Event, error)
 }

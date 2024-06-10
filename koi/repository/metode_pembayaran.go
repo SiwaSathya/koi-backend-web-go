@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"fmt"
 	"koi-backend-web-go/domain"
 
@@ -37,4 +38,28 @@ func (a *posgreMetodePembayaranRepository) CreateMetodePembayaran(req *domain.Me
 	}
 
 	return createdMetodePembayaran, nil
+}
+
+func (a *posgreMetodePembayaranRepository) UpdateMetodePembayaran(req *domain.MetodePembayaran) error {
+	err := a.DB.
+		Model(domain.DetailKegiatan{}).
+		Where("id = ?", req.ID).
+		Select("judul", "nama_bank", "no_rekening", "pemilik_rekening").
+		Updates(map[string]interface{}{
+			"judul":            req.Judul,
+			"nama_bank":        req.NamaBank,
+			"no_rekening":      req.NoRekening,
+			"pemilik_rekening": req.PemilikRekening,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
 }
