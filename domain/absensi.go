@@ -14,7 +14,7 @@ type Absensi struct {
 	NamaMahasiswa   uint           `gorm:"not null" json:"name"`
 	NoTelepon       string         `gorm:"not null" json:"no_telepon"`
 	Institusi       uint           `gorm:"not null" json:"institusi"`
-	BuktiPembayaran string         `gorm:"not null" json:"bukti_pempabayaran"`
+	BuktiPembayaran string         `gorm:"not null" json:"bukti_pembayaran"`
 	ItsClose        uint           `gorm:"default:0" json:"its_close"`
 	Category        string         `gorm:"not null" json:"category"`
 	TanggalKegiatan string         `gorm:"not null" json:"tanggal_kegiatan"`
