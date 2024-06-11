@@ -61,13 +61,14 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 
 	if req.Role == "ormawa" {
 		payOrm := domain.Ormawa{
-			Password: password,
-			UserID:   res.ID,
+			UserID: res.ID,
 		}
 
 		if req.NamaOrmawa != nil {
 			payOrm.NamaOrmawa = *req.NamaOrmawa
 			payOrm.Status = *req.Status
+			payOrm.Deskripsi = *req.Deskripsi
+			payOrm.JenisOrmawa = *req.JenisOrmawa
 		} else {
 			return nil, fmt.Errorf("nama_ormawa and status must be field if the role is ormawa")
 		}
@@ -77,12 +78,16 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		}
 	} else if req.Role == "mahasiswa" {
 		payMhs := domain.Mahasiswa{
-			Username: *req.Username,
-			Password: password,
-			UserID:   res.ID,
+			UserID: res.ID,
 		}
 		if req.Nim != nil {
 			payMhs.Nim = *req.Nim
+			payMhs.NoTelepon = *req.NoTelepon
+			payMhs.Email = *req.Email
+			payMhs.TanggalLahir = *req.TanggalLahir
+			payMhs.JenisKelamin = *req.JenisKelamin
+			payMhs.TempatLahir = *req.TempatLahir
+			payMhs.AlamatTinggal = *req.AlamatTinggal
 		} else {
 			return nil, fmt.Errorf("nim must be field in if the role is mahasiswa")
 		}
@@ -180,4 +185,46 @@ func (c *userUseCase) ResetPassword(ctx context.Context, req *domain.ResetPasswo
 	}
 	return nil
 
+}
+
+func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser) error {
+	if req.Role == "ormawa" {
+		payOrm := domain.Ormawa{
+			UserID: req.ID,
+		}
+
+		if req.NamaOrmawa != nil {
+			payOrm.NamaOrmawa = *req.NamaOrmawa
+			payOrm.Status = *req.Status
+			payOrm.Deskripsi = *req.Deskripsi
+			payOrm.JenisOrmawa = *req.JenisOrmawa
+		} else {
+			return fmt.Errorf("nama_ormawa and status must be field if the role is ormawa")
+		}
+		err := c.ormawaRepository.Updateormawa(&payOrm)
+		if err != nil {
+			return err
+		}
+	} else if req.Role == "mahasiswa" {
+		payMhs := domain.Mahasiswa{
+			UserID: req.ID,
+		}
+		if req.Nim != nil {
+			payMhs.Nim = *req.Nim
+			payMhs.NoTelepon = *req.NoTelepon
+			payMhs.Email = *req.Email
+			payMhs.TanggalLahir = *req.TanggalLahir
+			payMhs.JenisKelamin = *req.JenisKelamin
+			payMhs.TempatLahir = *req.TempatLahir
+			payMhs.AlamatTinggal = *req.AlamatTinggal
+		} else {
+			return fmt.Errorf("nim must be field in if the role is mahasiswa")
+		}
+		err := c.mahasiswaRepository.UpdateMahasiswa(&payMhs)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

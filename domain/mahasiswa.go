@@ -8,8 +8,6 @@ import (
 
 type Mahasiswa struct {
 	Nim           uint           `gorm:"primarykey;AUTO_INCREMENT" json:"nim"`
-	Username      string         `gorm:"not null" json:"username"`
-	Password      string         `gorm:"not null" json:"password"`
 	UserID        uint           `gorm:"not null" json:"user_id"`
 	NoTelepon     string         `gorm:"not null" json:"no_telepon"`
 	Email         string         `gorm:"not null" json:"email"`
@@ -26,4 +24,5 @@ type Mahasiswa struct {
 type MahasiswaRepository interface {
 	CreateMahasiswa(req *Mahasiswa) (*Mahasiswa, error)
 	GetMahasiswaByUserID(userID uint) (*Mahasiswa, error)
+	UpdateMahasiswa(req *Mahasiswa) error
 }

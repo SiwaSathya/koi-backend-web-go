@@ -13,7 +13,8 @@ type Absensi struct {
 	UserId          *uint          `gorm:"null" json:"user_id"`
 	NamaMahasiswa   string         `gorm:"not null" json:"name"`
 	NoTelepon       string         `gorm:"not null" json:"no_telepon"`
-	Institusi       string         `gorm:"not null" json:"institusi"`
+	Institusi       uint           `gorm:"not null" json:"institusi"`
+	Status          string         `gorm:"not null" json:"status"`
 	BuktiPembayaran string         `gorm:"not null" json:"bukti_pembayaran"`
 	ItsClose        uint           `gorm:"default:0" json:"its_close"`
 	Category        string         `gorm:"not null" json:"category"`
@@ -28,8 +29,10 @@ type Absensi struct {
 
 type AbsensiRepoository interface {
 	CreateAbsensi(req *Absensi) (*Absensi, error)
+	GetAbsensiByEventID(eventId uint) ([]Absensi, error)
 }
 
 type AbsensiUseCase interface {
 	CreateAbsensi(ctx context.Context, req *Absensi) (*Absensi, error)
+	GetAbsensiByEventID(ctx context.Context, eventId uint) ([]Absensi, error)
 }

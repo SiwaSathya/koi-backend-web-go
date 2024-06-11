@@ -74,11 +74,33 @@ func (a *posgreUserRepository) GetUserById(id uint) (*domain.User, error) {
 
 func (a *posgreUserRepository) UpdatePassword(req *domain.ResetPassword) error {
 	err := a.DB.
-		Model(domain.Event{}).
-		Where("user_id = ?", req.UserID).
+		Model(domain.User{}).
+		Where("id = ?", req.UserID).
 		Select("password").
 		Updates(map[string]interface{}{
 			"password": req.Password,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}
+
+func (a *posgreUserRepository) UpdateProfile(req *domain.User) error {
+	err := a.DB.
+		Model(domain.User{}).
+		Where("id = ?", req.ID).
+		Select("username", "role").
+		Updates(map[string]interface{}{
+			"role":     req.Role,
+			"username": req.Username,
 		}).
 		Error
 

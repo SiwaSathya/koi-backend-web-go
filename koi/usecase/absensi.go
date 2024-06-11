@@ -21,3 +21,7 @@ func NewAbsensiUseCase(dtl domain.AbsensiRepoository, t time.Duration) domain.Ab
 func (a *absensiUseCase) CreateAbsensi(ctx context.Context, req *domain.Absensi) (*domain.Absensi, error) {
 	return a.absensiRepository.CreateAbsensi(req)
 }
+
+func (a *absensiUseCase) GetAbsensiByEventID(ctx context.Context, eventId uint) ([]domain.Absensi, error) {
+	return a.absensiRepository.GetAbsensiByEventID(eventId)
+}

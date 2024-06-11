@@ -48,3 +48,27 @@ func (a *posgreOrmawaRepository) GetOrmawaByID(id uint) (*domain.Ormawa, error) 
 
 	return &res, nil
 }
+
+func (a *posgreOrmawaRepository) Updateormawa(req *domain.Ormawa) error {
+	err := a.DB.
+		Model(domain.Mahasiswa{}).
+		Where("user_id = ?", req.UserID).
+		Select("nama_ormawa", "status", "deskripsi", "jenis_ormawa").
+		Updates(map[string]interface{}{
+			"nama_ormawa":  req.NamaOrmawa,
+			"status":       req.Status,
+			"deskripsi":    req.Deskripsi,
+			"jenis_ormawa": req.JenisOrmawa,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}

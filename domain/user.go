@@ -28,6 +28,14 @@ type CreateUser struct {
 	NamaOrmawa      *string `json:"nama_ormawa"`
 	Status          *int    `json:"status"`
 	Password        string  `json:"password"`
+	Deskripsi       *string `gorm:"not null" json:"deskripsi"`
+	JenisOrmawa     *string `gorm:"not null" json:"jenis_ormawa"`
+	NoTelepon       *string `gorm:"not null" json:"no_telepon"`
+	Email           *string `gorm:"not null" json:"email"`
+	TanggalLahir    *string `gorm:"not null" json:"tanggal_lahir"`
+	JenisKelamin    *uint   `gorm:"not null" json:"jenis_kelamin"`
+	TempatLahir     *string `gorm:"not null" json:"tempat_lahir"`
+	AlamatTinggal   *string `gorm:"not null" json:"alamat_tinggal"`
 	ConfirmPassword string  `json:"confirm_password"`
 }
 
@@ -52,7 +60,7 @@ type UserRepository interface {
 	GetUser(username string) (*User, error)
 	GetUserById(id uint) (*User, error)
 	UpdatePassword(req *ResetPassword) error
-	// UpdateProfile()
+	UpdateProfile(req *User) error
 }
 
 type UserUseCase interface {
@@ -61,4 +69,5 @@ type UserUseCase interface {
 	GetUserById(ctx context.Context, id uint) (*User, error)
 	PengajuanEventOrmawa(ctx context.Context) (map[string]any, error)
 	ResetPassword(ctx context.Context, req *ResetPassword) error
+	UpdateProfile(ctx context.Context, req *CreateUser) error
 }

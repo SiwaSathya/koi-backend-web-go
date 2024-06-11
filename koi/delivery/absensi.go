@@ -2,6 +2,7 @@ package delivery
 
 import (
 	"koi-backend-web-go/domain"
+	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/pandeptwidyaop/golog"
@@ -20,6 +21,7 @@ func NewAbsensiHandler(c *fiber.App, das domain.AbsensiUseCase) {
 	_ = api.Group("/private")
 	public := api.Group("/public")
 	public.Post("/create", handler.AbsensiHandler)
+	public.Get("/get-absent/:id", handler.GetAbsensiByEventID)
 }
 
 func (t *AbsensiHandler) AbsensiHandler(c *fiber.Ctx) error {
@@ -38,6 +40,33 @@ func (t *AbsensiHandler) AbsensiHandler(c *fiber.Ctx) error {
 			"status":  false,
 			"message": er,
 			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
+		"message": "Successfully create user",
+	})
+}
+
+func (t *AbsensiHandler) GetAbsensiByEventID(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":  false,
+			"message": "failed convert to int",
+			"error":   err,
+		})
+	}
+
+	res, err := t.AbsensiUC.GetAbsensiByEventID(c.Context(), uint(id))
+	if err != nil {
+		golog.Slack.ErrorWithData("error create user", c.Body(), err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": err,
+			"error":   err.Error(),
 		})
 	}
 

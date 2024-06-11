@@ -10,7 +10,6 @@ type Ormawa struct {
 	ID          uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
 	NamaOrmawa  string         `gorm:"not null" json:"nama_ormawa"`
 	Status      int            `gorm:"not null" json:"status"`
-	Password    string         `gorm:"not null" json:"password"`
 	UserID      uint           `gorm:"not null" json:"user_id"`
 	Deskripsi   string         `gorm:"not null" json:"deskripsi"`
 	JenisOrmawa string         `gorm:"not null" json:"jenis_ormawa"`
@@ -24,4 +23,5 @@ type Ormawa struct {
 type OrmawaRepository interface {
 	CreateOrmawa(req *Ormawa) (*Ormawa, error)
 	GetOrmawaByID(id uint) (*Ormawa, error)
+	Updateormawa(req *Ormawa) error
 }

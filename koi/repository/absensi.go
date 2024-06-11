@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+	"fmt"
 	"koi-backend-web-go/domain"
 
 	"gorm.io/gorm"
@@ -35,4 +37,22 @@ func (a *posgreAbsensiRepository) CreateAbsensi(req *domain.Absensi) (*domain.Ab
 	}
 
 	return createdAbsensi, nil
+}
+
+func (a *posgreAbsensiRepository) GetAbsensiByEventID(eventId uint) ([]domain.Absensi, error) {
+	var res []domain.Absensi
+	err := a.DB.
+		Model(domain.Absensi{}).
+		Where("event_id = ?", eventId).
+		// Preload("User").
+		Find(&res).Error
+	if err != nil {
+		return []domain.Absensi{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []domain.Absensi{}, fmt.Errorf("record not found")
+	}
+
+	return res, nil
 }

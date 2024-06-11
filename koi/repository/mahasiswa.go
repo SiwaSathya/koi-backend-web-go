@@ -56,3 +56,29 @@ func (a *posgreMahasiswaRepository) GetMahasiswaByUserID(userID uint) (*domain.M
 	return &res, nil
 
 }
+
+func (a *posgreMahasiswaRepository) UpdateMahasiswa(req *domain.Mahasiswa) error {
+	err := a.DB.
+		Model(domain.Mahasiswa{}).
+		Where("user_id = ?", req.UserID).
+		Select("no_telepon", "email", "tanggal_lahir", "jenis_kelamin", "tempat_lahir", "alamat_tinggal").
+		Updates(map[string]interface{}{
+			"no_telepon":     req.NoTelepon,
+			"email":          req.Email,
+			"tanggal_lahir":  req.TanggalLahir,
+			"jenis_kelamin":  req.JenisKelamin,
+			"tempat_lahir":   req.TempatLahir,
+			"alamat_tinggal": req.AlamatTinggal,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}
