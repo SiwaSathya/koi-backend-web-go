@@ -11,7 +11,7 @@ type Absensi struct {
 	ID              uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
 	EventId         uint           `gorm:"not null" json:"event_id"`
 	UserId          *uint          `gorm:"null" json:"user_id"`
-	NamaMahasiswa   uint           `gorm:"not null" json:"name"`
+	NamaMahasiswa   string         `gorm:"not null" json:"name"`
 	NoTelepon       string         `gorm:"not null" json:"no_telepon"`
 	Institusi       uint           `gorm:"not null" json:"institusi"`
 	BuktiPembayaran string         `gorm:"not null" json:"bukti_pembayaran"`
