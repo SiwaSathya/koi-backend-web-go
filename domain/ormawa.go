@@ -14,6 +14,8 @@ type Ormawa struct {
 	Email       string         `gorm:"not null" json:"email"`
 	Deskripsi   string         `gorm:"not null" json:"deskripsi"`
 	JenisOrmawa string         `gorm:"not null" json:"jenis_ormawa"`
+	Logo        string         `gorm:"not null" json:"logo"`
+	Cover       string         `gorm:"not null" json:"cover"`
 	User        *User          `json:"user"`
 	Event       *Event         `json:"event"`
 	CreatedAt   *time.Time     `json:"created_at"`
