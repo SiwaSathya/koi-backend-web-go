@@ -51,12 +51,13 @@ func (a *posgreOrmawaRepository) GetOrmawaByID(id uint) (*domain.Ormawa, error) 
 
 func (a *posgreOrmawaRepository) Updateormawa(req *domain.Ormawa) error {
 	err := a.DB.
-		Model(domain.Mahasiswa{}).
+		Model(domain.Ormawa{}).
 		Where("user_id = ?", req.UserID).
-		Select("nama_ormawa", "status", "deskripsi", "jenis_ormawa").
+		Select("nama_ormawa", "status", "deskripsi", "jenis_ormawa", "email").
 		Updates(map[string]interface{}{
 			"nama_ormawa":  req.NamaOrmawa,
 			"status":       req.Status,
+			"email":        req.Email,
 			"deskripsi":    req.Deskripsi,
 			"jenis_ormawa": req.JenisOrmawa,
 		}).

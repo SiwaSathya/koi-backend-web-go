@@ -197,6 +197,7 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 		if req.NamaOrmawa != nil {
 			payOrm.NamaOrmawa = *req.NamaOrmawa
 			payOrm.Status = *req.Status
+			payOrm.Email = *req.Email
 			payOrm.Deskripsi = *req.Deskripsi
 			payOrm.JenisOrmawa = *req.JenisOrmawa
 		} else {
