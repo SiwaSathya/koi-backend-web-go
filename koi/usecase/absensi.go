@@ -25,3 +25,7 @@ func (a *absensiUseCase) CreateAbsensi(ctx context.Context, req *domain.Absensi)
 func (a *absensiUseCase) GetAbsensiByEventID(ctx context.Context, eventId uint) ([]domain.Absensi, error) {
 	return a.absensiRepository.GetAbsensiByEventID(eventId)
 }
+
+func (a *absensiUseCase) UpdateStatus(ctx context.Context, userId uint, status string) error {
+	return a.absensiRepository.UpdateStatus(userId, status)
+}

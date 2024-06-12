@@ -22,6 +22,7 @@ func NewAbsensiHandler(c *fiber.App, das domain.AbsensiUseCase) {
 	public := api.Group("/public")
 	public.Post("/create", handler.AbsensiHandler)
 	public.Get("/get-absent/:id", handler.GetAbsensiByEventID)
+	public.Put("/update/status/:id", handler.UpdateStatusHandler)
 }
 
 func (t *AbsensiHandler) AbsensiHandler(c *fiber.Ctx) error {
@@ -73,6 +74,39 @@ func (t *AbsensiHandler) GetAbsensiByEventID(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"data":    res,
+		"message": "Successfully create user",
+	})
+}
+
+func (t *AbsensiHandler) UpdateStatusHandler(c *fiber.Ctx) error {
+	req := new(domain.Absensi)
+	if err := c.BodyParser(req); err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to parse body",
+			"error":   err,
+		})
+	}
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":  false,
+			"message": "failed convert to int",
+			"error":   err,
+		})
+	}
+	er := t.AbsensiUC.UpdateStatus(c.Context(), uint(id), req.Status)
+	if er != nil {
+		golog.Slack.ErrorWithData("error create user", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
 		"message": "Successfully create user",
 	})
 }

@@ -56,3 +56,24 @@ func (a *posgreAbsensiRepository) GetAbsensiByEventID(eventId uint) ([]domain.Ab
 
 	return res, nil
 }
+
+func (a *posgreAbsensiRepository) UpdateStatus(eventID uint, status string) error {
+	err := a.DB.
+		Model(domain.DetailKegiatan{}).
+		Where("event_id = ?", eventID).
+		Select("status").
+		Updates(map[string]interface{}{
+			"status": status,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}
