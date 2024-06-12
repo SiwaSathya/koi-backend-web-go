@@ -81,6 +81,7 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 			UserID: res.ID,
 		}
 		if req.Nim != nil {
+			payMhs.NamaMahasiswa = *req.NamaMahasiswa
 			payMhs.Nim = *req.Nim
 			payMhs.NoTelepon = *req.NoTelepon
 			payMhs.Email = *req.Email

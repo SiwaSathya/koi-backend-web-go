@@ -10,6 +10,7 @@ type Mahasiswa struct {
 	Nim           uint           `gorm:"primarykey;AUTO_INCREMENT" json:"nim"`
 	UserID        uint           `gorm:"not null" json:"user_id"`
 	NoTelepon     string         `gorm:"not null" json:"no_telepon"`
+	NamaMahasiswa string         `gorm:"not null" json:"nama_mahasiswa"`
 	Email         string         `gorm:"not null" json:"email"`
 	TanggalLahir  string         `gorm:"not null" json:"tanggal_lahir"`
 	JenisKelamin  uint           `gorm:"not null" json:"jenis_kelamin"`

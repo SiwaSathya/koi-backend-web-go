@@ -26,6 +26,7 @@ type CreateUser struct {
 	Username        *string `json:"username"`
 	Role            string  `json:"role"`
 	NamaOrmawa      *string `json:"nama_ormawa"`
+	NamaMahasiswa   *string `json:"nama_mahasiswa"`
 	Status          *int    `json:"status"`
 	Password        string  `json:"password"`
 	Deskripsi       *string `gorm:"not null" json:"deskripsi"`
