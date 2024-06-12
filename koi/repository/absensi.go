@@ -59,8 +59,8 @@ func (a *posgreAbsensiRepository) GetAbsensiByEventID(eventId uint) ([]domain.Ab
 
 func (a *posgreAbsensiRepository) UpdateStatus(eventID uint, status string) error {
 	err := a.DB.
-		Model(domain.DetailKegiatan{}).
-		Where("event_id = ?", eventID).
+		Model(domain.Absensi{}).
+		Where("user_id = ?", eventID).
 		Select("status").
 		Updates(map[string]interface{}{
 			"status": status,
