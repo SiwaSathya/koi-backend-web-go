@@ -211,6 +211,7 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 			UserID: req.ID,
 		}
 		if req.Nim != nil {
+			payMhs.NamaMahasiswa = *req.NamaMahasiswa
 			payMhs.Nim = *req.Nim
 			payMhs.NoTelepon = *req.NoTelepon
 			payMhs.Email = *req.Email
@@ -221,6 +222,7 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 		} else {
 			return fmt.Errorf("nim must be field in if the role is mahasiswa")
 		}
+		fmt.Println(payMhs)
 		err := c.mahasiswaRepository.UpdateMahasiswa(&payMhs)
 		if err != nil {
 			return err
