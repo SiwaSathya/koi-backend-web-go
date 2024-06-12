@@ -11,6 +11,7 @@ type Ormawa struct {
 	NamaOrmawa  string         `gorm:"not null" json:"nama_ormawa"`
 	Status      int            `gorm:"not null" json:"status"`
 	UserID      uint           `gorm:"not null" json:"user_id"`
+	Email       string         `gorm:"not null" json:"email"`
 	Deskripsi   string         `gorm:"not null" json:"deskripsi"`
 	JenisOrmawa string         `gorm:"not null" json:"jenis_ormawa"`
 	User        *User          `json:"user"`
