@@ -210,6 +210,7 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 		payMhs := domain.Mahasiswa{
 			UserID: req.ID,
 		}
+		fmt.Println("Nama Mahasiswa", *req.NamaMahasiswa)
 		if req.Nim != nil {
 			payMhs.NamaMahasiswa = *req.NamaMahasiswa
 			payMhs.Nim = *req.Nim
