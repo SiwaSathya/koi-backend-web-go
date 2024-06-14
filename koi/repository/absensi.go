@@ -57,10 +57,12 @@ func (a *posgreAbsensiRepository) GetAbsensiByEventID(eventId uint) ([]domain.Ab
 	return res, nil
 }
 
-func (a *posgreAbsensiRepository) UpdateStatus(eventID uint, status string) error {
+func (a *posgreAbsensiRepository) UpdateStatus(eventID uint, userID uint, status string) error {
+	fmt.Println(eventID, userID, status)
 	err := a.DB.
 		Model(domain.Absensi{}).
-		Where("user_id = ?", eventID).
+		Where("event_id = ?", eventID).
+		Where("user_id = ?", userID).
 		Select("status").
 		Updates(map[string]interface{}{
 			"status": status,
@@ -82,6 +84,8 @@ func (a *posgreAbsensiRepository) GetAllAbsensi() ([]domain.Absensi, error) {
 	var res []domain.Absensi
 	err := a.DB.
 		Model(domain.Absensi{}).
+		Preload("Event").
+		Preload("Event.DetailKegiatan").
 		Find(&res).Error
 	if err != nil {
 		return []domain.Absensi{}, err

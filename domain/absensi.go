@@ -10,7 +10,7 @@ import (
 type Absensi struct {
 	ID              uint           `gorm:"primarykey;AUTO_INCREMENT" json:"id"`
 	EventId         uint           `gorm:"not null" json:"event_id"`
-	UserId          *uint          `gorm:"null" json:"user_id"`
+	UserId          uint           `gorm:"not null" json:"user_id"`
 	NamaMahasiswa   string         `gorm:"not null" json:"name_mahasiswa"`
 	NoTelepon       string         `gorm:"not null" json:"no_telepon"`
 	Institusi       string         `gorm:"not null" json:"institusi"`
@@ -31,12 +31,12 @@ type AbsensiRepoository interface {
 	CreateAbsensi(req *Absensi) (*Absensi, error)
 	GetAllAbsensi() ([]Absensi, error)
 	GetAbsensiByEventID(eventId uint) ([]Absensi, error)
-	UpdateStatus(userId uint, status string) error
+	UpdateStatus(eventId uint, userId uint, status string) error
 }
 
 type AbsensiUseCase interface {
 	CreateAbsensi(ctx context.Context, req *Absensi) (*Absensi, error)
 	GetAllAbsensi(ctx context.Context) ([]Absensi, error)
 	GetAbsensiByEventID(ctx context.Context, eventId uint) ([]Absensi, error)
-	UpdateStatus(ctx context.Context, userId uint, status string) error
+	UpdateStatus(ctx context.Context, eventId uint, userId uint, status string) error
 }

@@ -1,7 +1,9 @@
 package delivery
 
 import (
+	"fmt"
 	"koi-backend-web-go/domain"
+	"koi-backend-web-go/middleware"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -24,7 +26,7 @@ func NewAbsensiHandler(c *fiber.App, das domain.AbsensiUseCase) {
 	// get all absensi
 	public.Get("/get-all", handler.GetAllAbsensiHandler)
 	public.Get("/get-absent/:id", handler.GetAbsensiByEventID)
-	public.Put("/update/status/:id", handler.UpdateStatusHandler)
+	public.Put("/update/status/:id", middleware.Validate, handler.UpdateStatusHandler)
 }
 
 func (t *AbsensiHandler) AbsensiHandler(c *fiber.Ctx) error {
@@ -89,7 +91,7 @@ func (t *AbsensiHandler) UpdateStatusHandler(c *fiber.Ctx) error {
 			"error":   err,
 		})
 	}
-	id, err := strconv.Atoi(c.Params("id"))
+	idEvent, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
 		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
 			"status":  false,
@@ -97,7 +99,8 @@ func (t *AbsensiHandler) UpdateStatusHandler(c *fiber.Ctx) error {
 			"error":   err,
 		})
 	}
-	er := t.AbsensiUC.UpdateStatus(c.Context(), uint(id), req.Status)
+	fmt.Println(req.UserId)
+	er := t.AbsensiUC.UpdateStatus(c.Context(), uint(idEvent), req.UserId, req.Status)
 	if er != nil {
 		golog.Slack.ErrorWithData("error create user", c.Body(), er)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
