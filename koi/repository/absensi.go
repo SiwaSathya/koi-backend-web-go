@@ -77,3 +77,19 @@ func (a *posgreAbsensiRepository) UpdateStatus(eventID uint, status string) erro
 
 	return nil
 }
+
+func (a *posgreAbsensiRepository) GetAllAbsensi() ([]domain.Absensi, error) {
+	var res []domain.Absensi
+	err := a.DB.
+		Model(domain.Absensi{}).
+		Find(&res).Error
+	if err != nil {
+		return []domain.Absensi{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []domain.Absensi{}, fmt.Errorf("record not found")
+	}
+
+	return res, nil
+}

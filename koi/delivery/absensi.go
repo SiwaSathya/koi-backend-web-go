@@ -21,6 +21,8 @@ func NewAbsensiHandler(c *fiber.App, das domain.AbsensiUseCase) {
 	_ = api.Group("/private")
 	public := api.Group("/public")
 	public.Post("/create", handler.AbsensiHandler)
+	// get all absensi
+	public.Get("/get-all", handler.GetAllAbsensiHandler)
 	public.Get("/get-absent/:id", handler.GetAbsensiByEventID)
 	public.Put("/update/status/:id", handler.UpdateStatusHandler)
 }
@@ -107,6 +109,24 @@ func (t *AbsensiHandler) UpdateStatusHandler(c *fiber.Ctx) error {
 
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
+		"message": "Successfully create user",
+	})
+}
+
+func (t *AbsensiHandler) GetAllAbsensiHandler(c *fiber.Ctx) error {
+	res, err := t.AbsensiUC.GetAllAbsensi(c.Context())
+	if err != nil {
+		golog.Slack.ErrorWithData("error create user", c.Body(), err)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": err,
+			"error":   err.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
 		"message": "Successfully create user",
 	})
 }

@@ -29,12 +29,14 @@ type Absensi struct {
 
 type AbsensiRepoository interface {
 	CreateAbsensi(req *Absensi) (*Absensi, error)
+	GetAllAbsensi() ([]Absensi, error)
 	GetAbsensiByEventID(eventId uint) ([]Absensi, error)
 	UpdateStatus(userId uint, status string) error
 }
 
 type AbsensiUseCase interface {
 	CreateAbsensi(ctx context.Context, req *Absensi) (*Absensi, error)
+	GetAllAbsensi(ctx context.Context) ([]Absensi, error)
 	GetAbsensiByEventID(ctx context.Context, eventId uint) ([]Absensi, error)
 	UpdateStatus(ctx context.Context, userId uint, status string) error
 }
