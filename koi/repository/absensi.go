@@ -85,7 +85,7 @@ func (a *posgreAbsensiRepository) GetAllAbsensi() ([]domain.Absensi, error) {
 	err := a.DB.
 		Model(domain.Absensi{}).
 		Preload("Event").
-		Preload("Event.DetailKegiatan").
+		Preload("Event.Pembayaran").
 		Find(&res).Error
 	if err != nil {
 		return []domain.Absensi{}, err

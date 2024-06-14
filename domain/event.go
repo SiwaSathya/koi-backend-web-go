@@ -18,6 +18,7 @@ type Event struct {
 	TingkatKegiatan string          `gorm:"not null" json:"tingkat_kegiatan"`
 	Ormawa          *Ormawa         `json:"ormawa"`
 	DetailKegiatan  *DetailKegiatan `json:"detail_kegiatan"`
+	Pembayaran      *Pembayaran     `json:"pembayaran"`
 	CreatedAt       *time.Time      `json:"created_at"`
 	UpdatedAt       *time.Time      `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt  `gorm:"index" json:"deleted_at"`
