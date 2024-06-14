@@ -37,3 +37,15 @@ func (k *pembayaranUseCase) GetEventByMahasiswaID(ctx context.Context, id uint) 
 	id = res.Nim
 	return k.pembayaranRepository.GetEventByMahasiswaID(id)
 }
+
+func (k *pembayaranUseCase) GetEvents(ctx context.Context) ([]domain.Pembayaran, error) {
+	return k.pembayaranRepository.GetEvents()
+}
+
+func (k *pembayaranUseCase) UpdatePembayaran(ctx context.Context, req *domain.Pembayaran) (*domain.Pembayaran, error) {
+	return k.pembayaranRepository.UpdatePembayaran(req)
+}
+
+func (k *pembayaranUseCase) UpdateStatusPembayaran(ctx context.Context, req *domain.Pembayaran) (*domain.Pembayaran, error) {
+	return k.pembayaranRepository.UpdateStatusPembayaran(req)
+}
