@@ -24,6 +24,7 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 	private.Post("/create-event", middleware.ValidateTokenOrmawa, handler.CreateEvent)
 	private.Put("/update-event", middleware.ValidateTokenOrmawa, handler.UpdateEvent)
 	private.Get("/get-event-ormawa", middleware.ValidateTokenOrmawa, handler.GetAllEventsIdOrmawaSide)
+	private.Get("/get-event-by-id-and-ormawa/:id", middleware.ValidateTokenOrmawa, handler.GetEventByIDAndOrmawaID)
 
 	public := api.Group("/public")
 	public.Get("/get-all-events", handler.GetAllEvents)
@@ -169,6 +170,33 @@ func (t *EventHandler) GetEventByID(c *fiber.Ctx) error {
 		})
 	}
 	res, er := t.EventUC.GetEventByID(c.Context(), uint(id))
+	if er != nil {
+		golog.Slack.ErrorWithData("error get event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"data":    res,
+		"message": "Successfully get event",
+	})
+}
+
+func (t *EventHandler) GetEventByIDAndOrmawaID(c *fiber.Ctx) error {
+	eventId, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":  false,
+			"message": "failed convert to int",
+			"error":   err,
+		})
+	}
+	ormawaID := middleware.UserID(c)
+	res, er := t.EventUC.GetEventByIDAndOrmawaID(c.Context(), uint(ormawaID), uint(eventId))
 	if er != nil {
 		golog.Slack.ErrorWithData("error get event", c.Body(), er)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

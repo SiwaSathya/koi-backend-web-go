@@ -118,3 +118,24 @@ func (a *posgreEventRepository) UpdateEvent(req *domain.Event) error {
 
 	return nil
 }
+
+func (a *posgreEventRepository) GetEventByIDAndOrmawaID(idOrmawa uint, idEvent uint) (*domain.Event, error) {
+	var res domain.Event
+	err := a.DB.
+		Model(domain.Event{}).
+		Where("id = ? AND ormawa_id = ?", idEvent, idOrmawa).
+		Preload("DetailKegiatan").
+		Preload("Absensi").
+		Preload("DetailKegiatan.Narahubung").
+		Preload("DetailKegiatan.MetodePembayaran").
+		Find(&res).Error
+	if err != nil {
+		return &domain.Event{}, err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return &domain.Event{}, fmt.Errorf("record not found")
+	}
+
+	return &res, nil
+}
