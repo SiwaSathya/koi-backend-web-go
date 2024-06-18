@@ -104,7 +104,7 @@ func (a *posgreEventRepository) UpdateEvent(req *domain.Event) error {
 			"its_open":         req.ItsOpen,
 			"category":         req.Category,
 			"tanggal_kegiatan": req.TanggalKegiatan,
-			"tingkat_kegiatan": req.TanggalKegiatan,
+			"tingkat_kegiatan": req.TingkatKegiatan,
 		}).
 		Error
 
