@@ -54,6 +54,7 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		return nil, fmt.Errorf("password is not match")
 	}
 
+	// fmt.Println("PAY", pay)
 	res, err := c.userRepository.CreateUser(&pay)
 	if err != nil {
 		return nil, err
@@ -67,8 +68,8 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		if req.NamaOrmawa != nil {
 			payOrm.NamaOrmawa = *req.NamaOrmawa
 			payOrm.Status = *req.Status
-			payOrm.Deskripsi = *req.Deskripsi
-			payOrm.JenisOrmawa = *req.JenisOrmawa
+			payOrm.Deskripsi = req.Deskripsi
+			payOrm.JenisOrmawa = req.JenisOrmawa
 		} else {
 			return nil, fmt.Errorf("nama_ormawa and status must be field if the role is ormawa")
 		}
@@ -197,9 +198,9 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 		if req.NamaOrmawa != nil {
 			payOrm.NamaOrmawa = *req.NamaOrmawa
 			payOrm.Status = *req.Status
-			payOrm.Email = *req.Email
-			payOrm.Deskripsi = *req.Deskripsi
-			payOrm.JenisOrmawa = *req.JenisOrmawa
+			payOrm.Email = req.Email
+			payOrm.Deskripsi = req.Deskripsi
+			payOrm.JenisOrmawa = req.JenisOrmawa
 		} else {
 			return fmt.Errorf("nama_ormawa and status must be field if the role is ormawa")
 		}

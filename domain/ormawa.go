@@ -11,11 +11,11 @@ type Ormawa struct {
 	NamaOrmawa  string         `gorm:"not null" json:"nama_ormawa"`
 	Status      int            `gorm:"not null" json:"status"`
 	UserID      uint           `gorm:"not null" json:"user_id"`
-	Email       string         `gorm:"not null" json:"email"`
-	Deskripsi   string         `gorm:"not null" json:"deskripsi"`
-	JenisOrmawa string         `gorm:"not null" json:"jenis_ormawa"`
-	Logo        string         `gorm:"not null" json:"logo"`
-	Cover       string         `gorm:"not null" json:"cover"`
+	Email       *string        `json:"email" gorm:"null"`
+	Deskripsi   *string        `json:"deskripsi" gorm:"null"`
+	JenisOrmawa *string        `json:"jenis_ormawa" gorm:"null"`
+	Logo        *string        `json:"logo" gorm:"null"`
+	Cover       *string        `json:"cover" gorm:"null"`
 	User        *User          `json:"user"`
 	Event       *Event         `json:"event"`
 	CreatedAt   *time.Time     `json:"created_at"`
