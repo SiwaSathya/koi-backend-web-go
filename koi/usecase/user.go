@@ -82,14 +82,14 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 			UserID: res.ID,
 		}
 		if req.Nim != nil {
-			payMhs.NamaMahasiswa = *req.NamaMahasiswa
+			payMhs.NamaMahasiswa = req.NamaMahasiswa
 			payMhs.Nim = *req.Nim
-			payMhs.NoTelepon = *req.NoTelepon
-			payMhs.Email = *req.Email
-			payMhs.TanggalLahir = *req.TanggalLahir
-			payMhs.JenisKelamin = *req.JenisKelamin
-			payMhs.TempatLahir = *req.TempatLahir
-			payMhs.AlamatTinggal = *req.AlamatTinggal
+			payMhs.NoTelepon = req.NoTelepon
+			payMhs.Email = req.Email
+			payMhs.TanggalLahir = req.TanggalLahir
+			payMhs.JenisKelamin = req.JenisKelamin
+			payMhs.TempatLahir = req.TempatLahir
+			payMhs.AlamatTinggal = req.AlamatTinggal
 		} else {
 			return nil, fmt.Errorf("nim must be field in if the role is mahasiswa")
 		}
@@ -214,14 +214,14 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 		}
 		fmt.Println("Nama Mahasiswa", *req.NamaMahasiswa)
 		if req.Nim != nil {
-			payMhs.NamaMahasiswa = *req.NamaMahasiswa
+			payMhs.NamaMahasiswa = req.NamaMahasiswa
 			payMhs.Nim = *req.Nim
-			payMhs.NoTelepon = *req.NoTelepon
-			payMhs.Email = *req.Email
-			payMhs.TanggalLahir = *req.TanggalLahir
-			payMhs.JenisKelamin = *req.JenisKelamin
-			payMhs.TempatLahir = *req.TempatLahir
-			payMhs.AlamatTinggal = *req.AlamatTinggal
+			payMhs.NoTelepon = req.NoTelepon
+			payMhs.Email = req.Email
+			payMhs.TanggalLahir = req.TanggalLahir
+			payMhs.JenisKelamin = req.JenisKelamin
+			payMhs.TempatLahir = req.TempatLahir
+			payMhs.AlamatTinggal = req.AlamatTinggal
 		} else {
 			return fmt.Errorf("nim must be field in if the role is mahasiswa")
 		}
