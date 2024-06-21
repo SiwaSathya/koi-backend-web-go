@@ -42,6 +42,8 @@ func (e *eventUseCase) CreateEvent(ctx context.Context, req *domain.CreateEvent)
 		TanggalKegiatan: req.TanggalKegiatan,
 		TingkatKegiatan: req.TingkatKegiatan,
 		HargaTiket:      req.HargaTiket,
+		Category:        req.Category,
+		TypeImplement:   req.TypeImplement,
 	}
 	res, err := e.eventRepository.CreateEvent(&payEvent)
 	if err != nil {

@@ -32,6 +32,8 @@ type CreateEvent struct {
 	NamaKegiatan     string             `json:"nama_kegiatan"`
 	TanggalKegiatan  string             `json:"tanggal_kegiatan"`
 	TingkatKegiatan  string             `json:"tingkat_kegiatan"`
+	Category         string             `json:"category"`
+	TypeImplement    string             `json:"type_implement"`
 	HargaTiket       uint               `json:"harga_tiket"`
 	DetailKegiatan   DetailKegiatan     `json:"detail_kegiatan"`
 	MetodePembayaran []MetodePembayaran `json:"metode_pembayaran"`
