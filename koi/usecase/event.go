@@ -163,3 +163,7 @@ func (e *eventUseCase) GetEventByIDAndOrmawaID(ctx context.Context, idUser uint,
 func (e *eventUseCase) DeleteEvent(ctx context.Context, id uint) error {
 	return e.eventRepository.DeleteEvent(id)
 }
+
+func (e *eventUseCase) UpdateStatusEvent(ctx context.Context, id uint, its_open uint) error {
+	return e.eventRepository.UpdateStatusEvent(id, its_open)
+}

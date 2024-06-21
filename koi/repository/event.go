@@ -158,3 +158,24 @@ func (a *posgreEventRepository) DeleteEvent(id uint) error {
 
 	return nil
 }
+
+func (a *posgreEventRepository) UpdateStatusEvent(id uint, its_open uint) error {
+	err := a.DB.
+		Model(domain.Event{}).
+		Where("id = ?", id).
+		Select("its_open").
+		Updates(map[string]interface{}{
+			"its_open": its_open,
+		}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}

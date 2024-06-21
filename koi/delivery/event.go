@@ -25,8 +25,9 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 	private.Put("/update-event", middleware.ValidateTokenOrmawa, handler.UpdateEvent)
 	private.Get("/get-event-ormawa", middleware.ValidateTokenOrmawa, handler.GetAllEventsIdOrmawaSide)
 	private.Get("/get-event-by-id-and-ormawa/:id", middleware.ValidateTokenOrmawa, handler.GetEventByIDAndOrmawaID)
-	// delete event
 	private.Delete("/delete-event/:id", middleware.Validate, handler.DeleteEvent)
+	// update status event by id
+	private.Put("/update-status-event/:id", middleware.Validate, handler.UpdateStatusEvent)
 
 	public := api.Group("/public")
 	public.Get("/get-all-events", handler.GetAllEvents)
@@ -237,5 +238,38 @@ func (t *EventHandler) DeleteEvent(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusOK).JSON(fiber.Map{
 		"success": true,
 		"message": "Successfully delete event",
+	})
+}
+
+func (t *EventHandler) UpdateStatusEvent(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":  false,
+			"message": "failed convert to int",
+			"error":   err,
+		})
+	}
+	req := new(domain.ChangeStatusRequest)
+	if err := c.BodyParser(req); err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to parse body",
+			"error":   err,
+		})
+	}
+	er := t.EventUC.UpdateStatusEvent(c.Context(), uint(id), req.ItsOpen)
+	if er != nil {
+		golog.Slack.ErrorWithData("error update status event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "Successfully update status event",
 	})
 }

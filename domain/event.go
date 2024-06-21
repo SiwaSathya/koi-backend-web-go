@@ -99,6 +99,10 @@ type ResponeListEventOrmawa struct {
 	Event  []Event `json:"event"`
 }
 
+type ChangeStatusRequest struct {
+	ItsOpen uint `json:"its_open"`
+}
+
 type EventRepository interface {
 	CreateEvent(req *Event) (*Event, error)
 	GetAllEvents() ([]Event, error)
@@ -107,6 +111,7 @@ type EventRepository interface {
 	GetEventByID(id uint) (*Event, error)
 	GetEventByIDAndOrmawaID(idOrmawa uint, idEvent uint) (*Event, error)
 	DeleteEvent(id uint) error
+	UpdateStatusEvent(id uint, its_open uint) error
 }
 
 type EventUseCase interface {
@@ -117,4 +122,5 @@ type EventUseCase interface {
 	GetEventByID(ctx context.Context, id uint) (*Event, error)
 	GetEventByIDAndOrmawaID(ctx context.Context, idUser uint, idEvent uint) (*Event, error)
 	DeleteEvent(ctx context.Context, id uint) error
+	UpdateStatusEvent(ctx context.Context, id uint, its_open uint) error
 }
