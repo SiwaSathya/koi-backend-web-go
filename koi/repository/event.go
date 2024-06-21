@@ -97,7 +97,7 @@ func (a *posgreEventRepository) UpdateEvent(req *domain.Event) error {
 	err := a.DB.
 		Model(domain.Event{}).
 		Where("id = ?", req.ID).
-		Select("nama_kegiatan", "harga_tiket", "its_open", "categry", "tanggal_kegiatan", "tingkat_kegiatan").
+		Select("nama_kegiatan", "harga_tiket", "its_open", "category", "tanggal_kegiatan", "tingkat_kegiatan", "type_implement").
 		Updates(map[string]interface{}{
 			"nama_kegiatan":    req.NamaKegiatan,
 			"harga_tiket":      req.HargaTiket,
@@ -105,6 +105,7 @@ func (a *posgreEventRepository) UpdateEvent(req *domain.Event) error {
 			"category":         req.Category,
 			"tanggal_kegiatan": req.TanggalKegiatan,
 			"tingkat_kegiatan": req.TingkatKegiatan,
+			"type_implement":   req.TypeImplement,
 		}).
 		Error
 

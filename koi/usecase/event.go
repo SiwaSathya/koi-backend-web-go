@@ -107,6 +107,8 @@ func (e *eventUseCase) UpdateEvent(ctx context.Context, req *domain.CreateEvent)
 		TanggalKegiatan: req.TanggalKegiatan,
 		TingkatKegiatan: req.TingkatKegiatan,
 		HargaTiket:      req.HargaTiket,
+		Category:        req.Category,
+		TypeImplement:   req.TypeImplement,
 	}
 	err := e.eventRepository.UpdateEvent(&payEvent)
 	if err != nil {
