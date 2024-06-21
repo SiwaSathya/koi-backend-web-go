@@ -106,6 +106,7 @@ type EventRepository interface {
 	UpdateEvent(req *Event) error
 	GetEventByID(id uint) (*Event, error)
 	GetEventByIDAndOrmawaID(idOrmawa uint, idEvent uint) (*Event, error)
+	DeleteEvent(id uint) error
 }
 
 type EventUseCase interface {
@@ -115,4 +116,5 @@ type EventUseCase interface {
 	UpdateEvent(ctx context.Context, req *CreateEvent) error
 	GetEventByID(ctx context.Context, id uint) (*Event, error)
 	GetEventByIDAndOrmawaID(ctx context.Context, idUser uint, idEvent uint) (*Event, error)
+	DeleteEvent(ctx context.Context, id uint) error
 }

@@ -25,6 +25,8 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 	private.Put("/update-event", middleware.ValidateTokenOrmawa, handler.UpdateEvent)
 	private.Get("/get-event-ormawa", middleware.ValidateTokenOrmawa, handler.GetAllEventsIdOrmawaSide)
 	private.Get("/get-event-by-id-and-ormawa/:id", middleware.ValidateTokenOrmawa, handler.GetEventByIDAndOrmawaID)
+	// delete event
+	private.Delete("/delete-event/:id", middleware.Validate, handler.DeleteEvent)
 
 	public := api.Group("/public")
 	public.Get("/get-all-events", handler.GetAllEvents)
@@ -210,5 +212,30 @@ func (t *EventHandler) GetEventByIDAndOrmawaID(c *fiber.Ctx) error {
 		"success": true,
 		"data":    res,
 		"message": "Successfully get event",
+	})
+}
+
+func (t *EventHandler) DeleteEvent(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+			"status":  false,
+			"message": "failed convert to int",
+			"error":   err,
+		})
+	}
+	er := t.EventUC.DeleteEvent(c.Context(), uint(id))
+	if er != nil {
+		golog.Slack.ErrorWithData("error delete event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "Successfully delete event",
 	})
 }

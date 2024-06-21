@@ -159,3 +159,7 @@ func (e *eventUseCase) GetEventByIDAndOrmawaID(ctx context.Context, idUser uint,
 	fmt.Println("ini id ormawa: ", idOrmawa)
 	return e.eventRepository.GetEventByIDAndOrmawaID(idOrmawa, idEvent)
 }
+
+func (e *eventUseCase) DeleteEvent(ctx context.Context, id uint) error {
+	return e.eventRepository.DeleteEvent(id)
+}

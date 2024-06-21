@@ -140,3 +140,21 @@ func (a *posgreEventRepository) GetEventByIDAndOrmawaID(idOrmawa uint, idEvent u
 
 	return &res, nil
 }
+
+func (a *posgreEventRepository) DeleteEvent(id uint) error {
+	err := a.DB.
+		Model(domain.Event{}).
+		Where("id = ?", id).
+		Delete(&domain.Event{}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}
