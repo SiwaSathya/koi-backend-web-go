@@ -53,13 +53,15 @@ func (a *posgreOrmawaRepository) Updateormawa(req *domain.Ormawa) error {
 	err := a.DB.
 		Model(domain.Ormawa{}).
 		Where("user_id = ?", req.UserID).
-		Select("nama_ormawa", "status", "deskripsi", "jenis_ormawa", "email").
+		Select("nama_ormawa", "status", "deskripsi", "jenis_ormawa", "email", "cover", "logo").
 		Updates(map[string]interface{}{
 			"nama_ormawa":  req.NamaOrmawa,
 			"status":       req.Status,
 			"email":        req.Email,
 			"deskripsi":    req.Deskripsi,
 			"jenis_ormawa": req.JenisOrmawa,
+			"cover":        req.Cover,
+			"logo":         req.Logo,
 		}).
 		Error
 

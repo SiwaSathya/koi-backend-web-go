@@ -60,7 +60,7 @@ func (c *userUseCase) CreateUser(ctx context.Context, req *domain.CreateUser) (*
 		return nil, err
 	}
 
-	if req.Role == "ormawa" {
+	if req.Role == "ormawa" || req.Role == "kemahasiswaan" {
 		payOrm := domain.Ormawa{
 			UserID: res.ID,
 		}
@@ -190,7 +190,7 @@ func (c *userUseCase) ResetPassword(ctx context.Context, req *domain.ResetPasswo
 }
 
 func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser) error {
-	if req.Role == "ormawa" {
+	if req.Role == "ormawa" || req.Role == "kemahasiswaan" {
 		payOrm := domain.Ormawa{
 			UserID: req.ID,
 		}
@@ -201,6 +201,8 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 			payOrm.Email = req.Email
 			payOrm.Deskripsi = req.Deskripsi
 			payOrm.JenisOrmawa = req.JenisOrmawa
+			payOrm.Logo = req.Logo
+			payOrm.Cover = req.Cover
 		} else {
 			return fmt.Errorf("nama_ormawa and status must be field if the role is ormawa")
 		}
