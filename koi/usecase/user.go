@@ -222,6 +222,7 @@ func (c *userUseCase) UpdateProfile(ctx context.Context, req *domain.CreateUser)
 			payMhs.JenisKelamin = req.JenisKelamin
 			payMhs.TempatLahir = req.TempatLahir
 			payMhs.AlamatTinggal = req.AlamatTinggal
+			payMhs.Photo = req.Photo
 		} else {
 			return fmt.Errorf("nim must be field in if the role is mahasiswa")
 		}

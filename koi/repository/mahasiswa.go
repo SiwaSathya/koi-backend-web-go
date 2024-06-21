@@ -61,7 +61,7 @@ func (a *posgreMahasiswaRepository) UpdateMahasiswa(req *domain.Mahasiswa) error
 	err := a.DB.
 		Model(domain.Mahasiswa{}).
 		Where("user_id = ?", req.UserID).
-		Select("no_telepon", "email", "tanggal_lahir", "jenis_kelamin", "tempat_lahir", "alamat_tinggal", "nama_mahasiswa").
+		Select("no_telepon", "email", "tanggal_lahir", "jenis_kelamin", "tempat_lahir", "alamat_tinggal", "nama_mahasiswa", "photo").
 		Updates(map[string]interface{}{
 			"nama_mahasiswa": req.NamaMahasiswa,
 			"no_telepon":     req.NoTelepon,
@@ -70,6 +70,7 @@ func (a *posgreMahasiswaRepository) UpdateMahasiswa(req *domain.Mahasiswa) error
 			"jenis_kelamin":  req.JenisKelamin,
 			"tempat_lahir":   req.TempatLahir,
 			"alamat_tinggal": req.AlamatTinggal,
+			"photo":          req.Photo,
 		}).
 		Error
 

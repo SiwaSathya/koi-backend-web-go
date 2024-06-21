@@ -16,6 +16,7 @@ type Mahasiswa struct {
 	JenisKelamin  *uint          `gorm:"null" json:"jenis_kelamin" default:"0"`
 	TempatLahir   *string        `gorm:"null" json:"tempat_lahir"`
 	AlamatTinggal *string        `gorm:"null" json:"alamat_tinggal"`
+	Photo         *string        `gorm:"null" json:"photo"`
 	User          *User          `json:"user"`
 	CreatedAt     *time.Time     `json:"created_at"`
 	UpdatedAt     *time.Time     `json:"updated_at"`

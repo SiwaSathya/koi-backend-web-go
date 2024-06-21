@@ -38,6 +38,7 @@ type CreateUser struct {
 	TempatLahir     *string `gorm:"not null" json:"tempat_lahir"`
 	AlamatTinggal   *string `gorm:"not null" json:"alamat_tinggal"`
 	ConfirmPassword string  `json:"confirm_password"`
+	Photo           *string `json:"photo"`
 }
 
 type TokenClaims struct {
