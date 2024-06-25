@@ -87,7 +87,7 @@ func (a *posgreDetailKegiatanRepository) UpdateDetailKegiatan(req *domain.Detail
 	err := a.DB.
 		Model(domain.DetailKegiatan{}).
 		Where("id = ?", req.ID).
-		Select("waktu_pelaksanaan", "lokasi", "status", "deskripsi", "gambar_kegiatan", "file_pengajuan").
+		Select("waktu_pelaksanaan", "lokasi", "status", "deskripsi", "gambar_kegiatan", "file_pengajuan", "sertifikat").
 		Updates(map[string]interface{}{
 			"waktu_pelaksanaan": req.WaktuPelaksanaan,
 			"lokasi":            req.Lokasi,
@@ -95,6 +95,7 @@ func (a *posgreDetailKegiatanRepository) UpdateDetailKegiatan(req *domain.Detail
 			"deskripsi":         req.Deskripsi,
 			"gambar_kegiatan":   req.GambarKegiatan,
 			"file_pengajuan":    req.FilePengajuan,
+			"sertifikat":        req.Sertifikat,
 		}).
 		Error
 

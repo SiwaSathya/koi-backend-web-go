@@ -16,6 +16,7 @@ type DetailKegiatan struct {
 	Deskripsi        string              `gorm:"not null" json:"deskripsi"`
 	GambarKegiatan   string              `gorm:"not null" json:"gambar_kegiatan"`
 	FilePengajuan    string              `gorm:"not null" json:"file_pengajuan"`
+	Sertifikat       *string             `json:"sertifikat"`
 	Event            *Event              `json:"event"`
 	MetodePembayaran *[]MetodePembayaran `json:"metode_pembayaran"`
 	Narahubung       *[]Narahubung       `json:"narahubung"`
