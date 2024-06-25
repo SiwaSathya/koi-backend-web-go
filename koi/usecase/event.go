@@ -163,16 +163,11 @@ func (e *eventUseCase) GetEventByID(ctx context.Context, id uint) (*domain.Event
 }
 
 func (e *eventUseCase) GetEventByIDAndOrmawaID(ctx context.Context, idUser uint, idEvent uint) (*domain.Event, error) {
-	fmt.Println("ini id user: ", idUser)
-	fmt.Println(1)
 	user, err := e.userRepository.GetUserById(idUser)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(2)
-	fmt.Println("ini user: ", user.Ormawa)
 	idOrmawa := user.Ormawa.ID
-	fmt.Println("ini id ormawa: ", idOrmawa)
 	return e.eventRepository.GetEventByIDAndOrmawaID(idOrmawa, idEvent)
 }
 

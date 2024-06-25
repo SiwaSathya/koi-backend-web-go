@@ -61,8 +61,9 @@ func (a *posgreEventRepository) GetEventByID(id uint) (*domain.Event, error) {
 		Model(domain.Event{}).
 		Where("id = ?", id).
 		Preload("DetailKegiatan").
-		Preload("Narahubung").
-		Preload("MetodePembayaran").
+		Preload("Absensi").
+		Preload("DetailKegiatan.Narahubung").
+		Preload("DetailKegiatan.MetodePembayaran").
 		Find(&res).Error
 	if err != nil {
 		return &domain.Event{}, err

@@ -24,15 +24,15 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 	private.Post("/create-event", middleware.ValidateTokenOrmawa, handler.CreateEvent)
 	private.Put("/update-event", middleware.ValidateTokenOrmawa, handler.UpdateEvent)
 	private.Get("/get-event-ormawa", middleware.ValidateTokenOrmawa, handler.GetAllEventsIdOrmawaSide)
-	private.Get("/get-event-by-id-and-ormawa/:id", middleware.ValidateTokenOrmawa, handler.GetEventByIDAndOrmawaID)
+	private.Get("/get-event-by-id-and-ormawa/:id", middleware.Validate, handler.GetEventByIDAndOrmawaID)
 	private.Delete("/delete-event/:id", middleware.Validate, handler.DeleteEvent)
-	// update status event by id
+
 	private.Put("/update-status-event/:id", middleware.Validate, handler.UpdateStatusEvent)
 
 	public := api.Group("/public")
 	public.Get("/get-all-events", handler.GetAllEvents)
 	public.Get("/get-event-by-ormawa/:id", handler.GetAllEventsIdOrmawa)
-	public.Get("/get-event-by-id", handler.GetEventByID)
+	public.Get("/get-event-by-id/:id", handler.GetEventByID)
 }
 
 func (t *EventHandler) CreateEvent(c *fiber.Ctx) error {
