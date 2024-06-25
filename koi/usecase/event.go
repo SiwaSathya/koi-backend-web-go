@@ -123,6 +123,14 @@ func (e *eventUseCase) UpdateEvent(ctx context.Context, req *domain.CreateEvent)
 
 	for _, valMet := range req.MetodePembayaran {
 		// valMet.DetailKegiatanID = resDet.ID
+		if valMet.ID == 0 {
+			_, err = e.metodePembayranRepository.CreateMetodePembayaran(&valMet)
+			if err != nil {
+				golog.Slack.Error(fmt.Sprintf("cannot store the metode pembayaran %v", valMet), err)
+				continue
+			}
+			continue
+		}
 		err = e.metodePembayranRepository.UpdateMetodePembayaran(&valMet)
 		if err != nil {
 			golog.Slack.Error(fmt.Sprintf("cannot store the metode pembayaran %v", valMet), err)
@@ -132,6 +140,14 @@ func (e *eventUseCase) UpdateEvent(ctx context.Context, req *domain.CreateEvent)
 
 	for _, valNar := range req.Narahubung {
 		// valNar.DetailKegiatanID = resDet.ID
+		if valNar.ID == 0 {
+			_, err = e.narahubungRepository.CreateNarahubung(&valNar)
+			if err != nil {
+				golog.Slack.Error(fmt.Sprintf("cannot store the narahubung %v", valNar), err)
+				continue
+			}
+			continue
+		}
 		err = e.narahubungRepository.UpdateNarahubung(&valNar)
 		if err != nil {
 			golog.Slack.Error(fmt.Sprintf("cannot store the narahubung %v", valNar), err)
