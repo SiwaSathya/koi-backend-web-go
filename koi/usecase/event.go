@@ -121,34 +121,29 @@ func (e *eventUseCase) UpdateEvent(ctx context.Context, req *domain.CreateEvent)
 		return err
 	}
 
+	// remove metode pembayaran by detail kegiatan id
+	err = e.metodePembayranRepository.RemoveMetodePembayaranByDetailKegiatanID(req.DetailKegiatan.ID)
+	if err != nil {
+		return err
+	}
+
 	for _, valMet := range req.MetodePembayaran {
 		// valMet.DetailKegiatanID = resDet.ID
-		if valMet.ID == 0 {
-			_, err = e.metodePembayranRepository.CreateMetodePembayaran(&valMet)
-			if err != nil {
-				golog.Slack.Error(fmt.Sprintf("cannot store the metode pembayaran %v", valMet), err)
-				continue
-			}
-			continue
-		}
-		err = e.metodePembayranRepository.UpdateMetodePembayaran(&valMet)
+		_, err = e.metodePembayranRepository.CreateMetodePembayaran(&valMet)
 		if err != nil {
 			golog.Slack.Error(fmt.Sprintf("cannot store the metode pembayaran %v", valMet), err)
 			continue
 		}
 	}
 
+	// remove narahubung by detail kegiatan id
+	err = e.narahubungRepository.RemoveNarahubungByDetailKegiatanID(req.DetailKegiatan.ID)
+	if err != nil {
+		return err
+	}
 	for _, valNar := range req.Narahubung {
 		// valNar.DetailKegiatanID = resDet.ID
-		if valNar.ID == 0 {
-			_, err = e.narahubungRepository.CreateNarahubung(&valNar)
-			if err != nil {
-				golog.Slack.Error(fmt.Sprintf("cannot store the narahubung %v", valNar), err)
-				continue
-			}
-			continue
-		}
-		err = e.narahubungRepository.UpdateNarahubung(&valNar)
+		_, err = e.narahubungRepository.CreateNarahubung(&valNar)
 		if err != nil {
 			golog.Slack.Error(fmt.Sprintf("cannot store the narahubung %v", valNar), err)
 			continue

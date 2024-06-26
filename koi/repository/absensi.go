@@ -97,3 +97,20 @@ func (a *posgreAbsensiRepository) GetAllAbsensi() ([]domain.Absensi, error) {
 
 	return res, nil
 }
+
+func (a *posgreAbsensiRepository) DeleteAbsensi(id uint) error {
+	err := a.DB.
+		Where("id = ?", id).
+		Delete(&domain.Absensi{}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}

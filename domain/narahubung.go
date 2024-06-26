@@ -20,4 +20,5 @@ type Narahubung struct {
 type NarahubungRepository interface {
 	CreateNarahubung(req *Narahubung) (*Narahubung, error)
 	UpdateNarahubung(req *Narahubung) error
+	RemoveNarahubungByDetailKegiatanID(id uint) error
 }

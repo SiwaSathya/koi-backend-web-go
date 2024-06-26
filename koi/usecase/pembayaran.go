@@ -49,3 +49,7 @@ func (k *pembayaranUseCase) UpdatePembayaran(ctx context.Context, req *domain.Pe
 func (k *pembayaranUseCase) UpdateStatusPembayaran(ctx context.Context, req *domain.Pembayaran) (*domain.Pembayaran, error) {
 	return k.pembayaranRepository.UpdateStatusPembayaran(req)
 }
+
+func (k *pembayaranUseCase) DeletePembayaran(ctx context.Context, id uint) error {
+	return k.pembayaranRepository.DeletePembayaran(id)
+}

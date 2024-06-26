@@ -22,7 +22,7 @@ func NewEventHandler(c *fiber.App, das domain.EventUseCase) {
 
 	private := api.Group("/private")
 	private.Post("/create-event", middleware.ValidateTokenOrmawa, handler.CreateEvent)
-	private.Put("/update-event", middleware.ValidateTokenOrmawa, handler.UpdateEvent)
+	private.Put("/update-event", middleware.Validate, handler.UpdateEvent)
 	private.Get("/get-event-ormawa", middleware.ValidateTokenOrmawa, handler.GetAllEventsIdOrmawaSide)
 	private.Get("/get-event-by-id-and-ormawa/:id", middleware.Validate, handler.GetEventByIDAndOrmawaID)
 	private.Delete("/delete-event/:id", middleware.Validate, handler.DeleteEvent)

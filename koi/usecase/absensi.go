@@ -33,3 +33,7 @@ func (a *absensiUseCase) UpdateStatus(ctx context.Context, eventId uint, userId 
 func (a *absensiUseCase) GetAllAbsensi(ctx context.Context) ([]domain.Absensi, error) {
 	return a.absensiRepository.GetAllAbsensi()
 }
+
+func (a *absensiUseCase) DeleteAbsensi(ctx context.Context, id uint) error {
+	return a.absensiRepository.DeleteAbsensi(id)
+}

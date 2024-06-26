@@ -31,6 +31,7 @@ type PembayaranRepository interface {
 	GetEventByMahasiswaID(id uint) ([]Pembayaran, error)
 	UpdatePembayaran(req *Pembayaran) (*Pembayaran, error)
 	UpdateStatusPembayaran(req *Pembayaran) (*Pembayaran, error)
+	DeletePembayaran(id uint) error
 }
 
 type PembayaranUseCase interface {
@@ -39,4 +40,5 @@ type PembayaranUseCase interface {
 	GetEventByMahasiswaID(ctx context.Context, id uint) ([]Pembayaran, error)
 	UpdatePembayaran(ctx context.Context, req *Pembayaran) (*Pembayaran, error)
 	UpdateStatusPembayaran(ctx context.Context, req *Pembayaran) (*Pembayaran, error)
+	DeletePembayaran(ctx context.Context, id uint) error
 }

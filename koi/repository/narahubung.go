@@ -62,3 +62,20 @@ func (a *posgreNarahubungRepository) UpdateNarahubung(req *domain.Narahubung) er
 
 	return nil
 }
+
+func (a *posgreNarahubungRepository) RemoveNarahubungByDetailKegiatanID(id uint) error {
+	err := a.DB.
+		Where("id = ?", id).
+		Delete(&domain.Narahubung{}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return fmt.Errorf("record not found")
+	}
+
+	return nil
+}

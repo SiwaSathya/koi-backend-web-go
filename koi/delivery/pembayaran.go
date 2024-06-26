@@ -22,8 +22,10 @@ func NewPembayaranHandler(c *fiber.App, das domain.PembayaranUseCase) {
 	private := api.Group("/private")
 	private.Post("/create", middleware.ValidateTokenMahasiswa, handler.CreatePemabayaran)
 	private.Put("/update/:id", middleware.ValidateTokenOrmawa, handler.CreatePemabayaran)
-	// update status pembayaran
 	private.Put("/update-status/:id", middleware.ValidateTokenOrmawa, handler.UpdatePembayaran)
+	// delete
+	private.Delete("/delete/:id", middleware.ValidateTokenOrmawa, handler.DeletePembayaran)
+
 	private.Get("/get-event-by-mahasiswa", middleware.ValidateTokenMahasiswa, handler.GetEventByMahasiswaID)
 
 	public := api.Group("/public")
@@ -166,5 +168,30 @@ func (t *PembayaranHandler) UpdateStatusPembayaran(c *fiber.Ctx) error {
 		"success": true,
 		"data":    res,
 		"message": "Successfully update status event",
+	})
+}
+
+func (t *PembayaranHandler) DeletePembayaran(c *fiber.Ctx) error {
+	id, err := strconv.Atoi(c.Params("id"))
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "Failed to parse id",
+			"error":   err,
+		})
+	}
+	er := t.PembayaranUC.DeletePembayaran(c.Context(), uint(id))
+	if er != nil {
+		golog.Slack.ErrorWithData("error delete event", c.Body(), er)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"status":  false,
+			"message": er,
+			"error":   er.Error(),
+		})
+	}
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"success": true,
+		"message": "Successfully delete event",
 	})
 }

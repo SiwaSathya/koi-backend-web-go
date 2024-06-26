@@ -23,4 +23,5 @@ type MetodePembayaran struct {
 type MetodePembayaranRepository interface {
 	CreateMetodePembayaran(req *MetodePembayaran) (*MetodePembayaran, error)
 	UpdateMetodePembayaran(req *MetodePembayaran) error
+	RemoveMetodePembayaranByDetailKegiatanID(id uint) error
 }

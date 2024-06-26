@@ -32,6 +32,7 @@ type AbsensiRepoository interface {
 	GetAllAbsensi() ([]Absensi, error)
 	GetAbsensiByEventID(eventId uint) ([]Absensi, error)
 	UpdateStatus(eventId uint, userId uint, status string) error
+	DeleteAbsensi(id uint) error
 }
 
 type AbsensiUseCase interface {
@@ -39,4 +40,5 @@ type AbsensiUseCase interface {
 	GetAllAbsensi(ctx context.Context) ([]Absensi, error)
 	GetAbsensiByEventID(ctx context.Context, eventId uint) ([]Absensi, error)
 	UpdateStatus(ctx context.Context, eventId uint, userId uint, status string) error
+	DeleteAbsensi(ctx context.Context, id uint) error
 }

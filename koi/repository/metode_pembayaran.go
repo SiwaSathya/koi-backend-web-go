@@ -63,3 +63,17 @@ func (a *posgreMetodePembayaranRepository) UpdateMetodePembayaran(req *domain.Me
 
 	return nil
 }
+
+// remove metode pembayaran by detail kegiatan id
+func (a *posgreMetodePembayaranRepository) RemoveMetodePembayaranByDetailKegiatanID(detailKegiatanID uint) error {
+	err := a.DB.
+		Where("detail_kegiatan_id = ?", detailKegiatanID).
+		Delete(&domain.MetodePembayaran{}).
+		Error
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

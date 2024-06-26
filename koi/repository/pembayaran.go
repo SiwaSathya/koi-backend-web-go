@@ -92,3 +92,13 @@ func (a *posgrePembayaranRepository) UpdateStatusPembayaran(req *domain.Pembayar
 	}
 	return req, nil
 }
+
+func (a *posgrePembayaranRepository) DeletePembayaran(id uint) error {
+	err := a.DB.
+		Where("id = ?", id).
+		Delete(&domain.Pembayaran{}).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
